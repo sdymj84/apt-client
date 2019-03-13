@@ -21,12 +21,16 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isAuthenticated: true
+      isAuthenticated: false,
+      uid: null
     }
   }
 
-  userHasAuthenticated = authenticated => {
-    this.setState({ isAuthenticated: authenticated })
+  userHasAuthenticated = uid => {
+    this.setState({
+      isAuthenticated: uid ? true : false,
+      uid
+    })
   }
 
   handleLogout = async () => {
@@ -42,6 +46,7 @@ class App extends Component {
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
+      uid: this.state.uid,
       userHasAuthenticated: this.userHasAuthenticated
     }
     return (

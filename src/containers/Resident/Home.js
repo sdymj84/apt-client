@@ -4,7 +4,36 @@ import { Container, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaMoneyCheckAlt, FaUserAlt } from "react-icons/fa";
 import { GiAutoRepair } from "react-icons/gi";
+import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
+
+const StyledContainer = styled(Container)`
+  text-align: center;
+
+  .icon-container {
+    margin: auto;
+    max-width: 500px;
+    cursor: pointer;
+    
+    p {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    
+    div {
+      margin-bottom: 20px;
+    }
+
+    .icon {
+      font-size: 7em;
+    }
+
+    hr {
+      margin: 0;
+      padding: 0;
+    }
+  }
+`
 
 const FlexContainer = styled.div`
   display: flex;
@@ -28,37 +57,8 @@ const StyledLink = styled(Link)`
     color: #136b4f;
     text-decoration: none;
   }
-
 `
 
-const StyledContainer = styled(Container)`
-  text-align: center;
-
-  .icon-container {
-    margin: auto;
-    cursor: pointer;
-    
-    p {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-    
-    div {
-      margin-bottom: 20px;
-    }
-
-    .icon {
-      font-size: 7em;
-    }
-
-    hr {
-      margin: 0;
-      padding: 0;
-    }
-  }
-  
-  
-`
 
 export class ResidentHome extends Component {
   renderLander() {
@@ -89,7 +89,7 @@ export class ResidentHome extends Component {
           </div>
         </FlexContainer>
         <Row className="icon-container">
-          <Col>
+          <Col sm={6}>
             <div>
               <StyledLink to='/payment'>
                 <FaMoneyCheckAlt className="icon" />
@@ -98,7 +98,7 @@ export class ResidentHome extends Component {
               </StyledLink>
             </div>
           </Col>
-          <Col>
+          <Col sm={6}>
             <div>
               <StyledLink to='/maintanance'>
                 <GiAutoRepair className="icon" />
@@ -107,12 +107,21 @@ export class ResidentHome extends Component {
               </StyledLink>
             </div>
           </Col>
-          <Col>
+          <Col sm={6}>
             <div>
               <StyledLink to='/resident'>
                 <FaUserAlt className="icon" />
                 <hr />
                 <p>User Info</p>
+              </StyledLink>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/contactus'>
+                <MdEmail className="icon" />
+                <hr />
+                <p>Contact Us</p>
               </StyledLink>
             </div>
           </Col>
