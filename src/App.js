@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import styled from 'styled-components'
 import Routes from './Routes'
-import { Auth } from 'aws-amplify'
+import { Auth, API } from 'aws-amplify'
+import Theme from './theme'
 
 
 const StyledContainer = styled(Container)`
@@ -22,14 +23,37 @@ class App extends Component {
     super(props)
     this.state = {
       isAuthenticated: false,
-      uid: null
+      uid: null,
+      resident: null,
+      theme: Theme.Basic
     }
   }
 
-  userHasAuthenticated = uid => {
+  componentDidMount = async () => {
+    try {
+      const currentUser = await Auth.currentAuthenticatedUser()
+      this.userHasAuthenticated(currentUser.username)
+    } catch (e) {
+      console.log(e, e.response)
+    }
+
+    this.setState({ isAuthenticated: false })
+  }
+
+
+  userHasAuthenticated = async (uid) => {
+    let resident = null
+    try {
+      resident = await API.get('apt', `/residents/${uid}`)
+    } catch (e) {
+      console.log(e)
+      console.log("Error response : ", e.response)
+    }
+
     this.setState({
       isAuthenticated: uid ? true : false,
-      uid
+      uid,
+      resident
     })
   }
 
@@ -47,7 +71,9 @@ class App extends Component {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       uid: this.state.uid,
-      userHasAuthenticated: this.userHasAuthenticated
+      userHasAuthenticated: this.userHasAuthenticated,
+      resident: this.state.resident,
+      theme: this.state.theme
     }
     return (
       <StyledContainer>
