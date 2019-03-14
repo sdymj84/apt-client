@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaUserAlt, FaUserPlus } from "react-icons/fa";
@@ -79,60 +79,58 @@ export class ManagerHome extends Component {
 
   renderManager() {
     return (
-      <ThemeProvider theme={this.props.theme}>
-        <StyledContainer>
-          <FlexContainer>
+      <StyledContainer>
+        <FlexContainer>
+          <div>
+            <h2>Welcome Manager</h2>
+          </div>
+        </FlexContainer>
+        <Row className="icon-container">
+          <Col sm={6}>
             <div>
-              <h2>Welcome Manager</h2>
+              <StyledLink to='/manager/new-resident'>
+                <FaUserPlus className="icon" />
+                <hr />
+                <p>New Resident</p>
+              </StyledLink>
             </div>
-          </FlexContainer>
-          <Row className="icon-container">
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/manager/new-resident'>
-                  <FaUserPlus className="icon" />
-                  <hr />
-                  <p>New Resident</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/manager/maintanance'>
-                  <GiAutoRepair className="icon" />
-                  <hr />
-                  <p>Maintanance</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/manager/resident'>
-                  <FaUserAlt className="icon" />
-                  <hr />
-                  <p>User Info</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/manager/apart'>
-                  <GiHouse className="icon" />
-                  <hr />
-                  <p>Apartment</p>
-                </StyledLink>
-              </div>
-            </Col>
-          </Row>
-        </StyledContainer>
-      </ThemeProvider>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/manager/maintanance'>
+                <GiAutoRepair className="icon" />
+                <hr />
+                <p>Maintanance</p>
+              </StyledLink>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/manager/resident'>
+                <FaUserAlt className="icon" />
+                <hr />
+                <p>User Info</p>
+              </StyledLink>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/manager/apart'>
+                <GiHouse className="icon" />
+                <hr />
+                <p>Apartment</p>
+              </StyledLink>
+            </div>
+          </Col>
+        </Row>
+      </StyledContainer>
     )
   }
 
   render() {
     console.log(this.props)
     return (
-      this.props.isAuthenticated
+      this.props.isManagerAuthenticated
         ? this.renderManager()
         : this.renderLander()
     )

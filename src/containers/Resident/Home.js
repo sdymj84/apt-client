@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styled, { ThemeProvider } from 'styled-components'
+import styled from 'styled-components'
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaMoneyCheckAlt, FaUserAlt } from "react-icons/fa";
@@ -81,54 +81,52 @@ export class ResidentHome extends Component {
 
   renderResident() {
     return (
-      <ThemeProvider theme={this.props.theme}>
-        <StyledContainer>
-          <FlexContainer>
+      <StyledContainer>
+        <FlexContainer>
+          <div>
+            <h2>Welcome Resident</h2>
+            <p>Welcome, you can pay your rent, request maintanance work, and update your info.</p>
+          </div>
+        </FlexContainer>
+        <Row className="icon-container">
+          <Col sm={6}>
             <div>
-              <h2>Welcome Resident</h2>
-              <p>Welcome, you can pay your rent, request maintanance work, and update your info.</p>
+              <StyledLink to='/payment'>
+                <FaMoneyCheckAlt className="icon" />
+                <hr />
+                <p>Payment</p>
+              </StyledLink>
             </div>
-          </FlexContainer>
-          <Row className="icon-container">
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/payment'>
-                  <FaMoneyCheckAlt className="icon" />
-                  <hr />
-                  <p>Payment</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/maintanance'>
-                  <GiAutoRepair className="icon" />
-                  <hr />
-                  <p>Maintanance</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/resident'>
-                  <FaUserAlt className="icon" />
-                  <hr />
-                  <p>User Info</p>
-                </StyledLink>
-              </div>
-            </Col>
-            <Col sm={6}>
-              <div>
-                <StyledLink to='/contactus'>
-                  <MdEmail className="icon" />
-                  <hr />
-                  <p>Contact Us</p>
-                </StyledLink>
-              </div>
-            </Col>
-          </Row>
-        </StyledContainer>
-      </ThemeProvider>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/maintanance'>
+                <GiAutoRepair className="icon" />
+                <hr />
+                <p>Maintanance</p>
+              </StyledLink>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/resident'>
+                <FaUserAlt className="icon" />
+                <hr />
+                <p>User Info</p>
+              </StyledLink>
+            </div>
+          </Col>
+          <Col sm={6}>
+            <div>
+              <StyledLink to='/contactus'>
+                <MdEmail className="icon" />
+                <hr />
+                <p>Contact Us</p>
+              </StyledLink>
+            </div>
+          </Col>
+        </Row>
+      </StyledContainer>
     )
   }
 
