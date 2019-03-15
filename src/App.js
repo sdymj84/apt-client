@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import styled from 'styled-components'
 import Routes from './Routes'
+import ManagerRoutes from './ManagerRoutes'
 import { Auth, API } from 'aws-amplify'
 import Theme from './theme'
 import { ThemeProvider } from 'styled-components'
@@ -45,11 +47,6 @@ class App extends Component {
 
 
   userHasAuthenticated = async (uid) => {
-    if (uid === "58e15cde-7dca-4453-9336-0bd368960c9e") {
-      this.setState({ isManagerAuthenticated: true })
-      return
-    }
-
     let resident = null
     try {
       resident = await API.get('apt', `/residents/${uid}`)
@@ -65,6 +62,23 @@ class App extends Component {
     })
   }
 
+  managerHasAuthenticated = async (uid) => {
+    console.log(uid)
+    if (uid === "58e15cde-7dca-4453-9336-0bd368960c9e") {
+      this.setState({ isManagerAuthenticated: true })
+    } else {
+      this.setState({ isManagerAuthenticated: false })
+
+      try {
+        await Auth.signOut()
+      } catch (e) {
+        console.log(e)
+        alert(e.message)
+      }
+      alert("Please use manager account")
+    }
+  }
+
   handleLogout = async () => {
     try {
       await Auth.signOut()
@@ -75,16 +89,24 @@ class App extends Component {
     }
   }
 
-  render() {
+  handleManagerLogout = async () => {
+    try {
+      await Auth.signOut()
+      this.managerHasAuthenticated(false)
+    } catch (e) {
+      console.log(e)
+      alert(e.message)
+    }
+  }
+
+  renderResident() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      isManagerAuthenticated: this.state.isManagerAuthenticated,
       uid: this.state.uid,
       userHasAuthenticated: this.userHasAuthenticated,
       resident: this.state.resident,
       theme: this.state.theme
     }
-    console.log(this.state)
     return (
       !this.state.isAuthenticating &&
       <ThemeProvider theme={this.state.theme}>
@@ -110,6 +132,44 @@ class App extends Component {
       </ThemeProvider>
     );
   }
+
+  renderManager() {
+    const childProps = {
+      isManagerAuthenticated: this.state.isManagerAuthenticated,
+      managerHasAuthenticated: this.managerHasAuthenticated,
+      theme: this.state.theme
+    }
+    return (
+      !this.state.isAuthenticating &&
+      <ThemeProvider theme={this.state.theme}>
+        <StyledContainer>
+          <Navbar variant="light" bg="light" expand="md">
+            <Navbar.Brand>
+              <Link to='/manager'>SAVOY Management</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+              <Nav className="ml-auto">
+                {this.state.isManagerAuthenticated
+                  ? <Nav.Link onClick={this.handleManagerLogout}>Manager Logout</Nav.Link>
+                  : <LinkContainer to='/manager/login'>
+                    <Nav.Link>Manager Login</Nav.Link>
+                  </LinkContainer>
+                }
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <ManagerRoutes childProps={childProps} />
+        </StyledContainer>
+      </ThemeProvider>
+    );
+  }
+
+  render() {
+    return (/^\/manager/.test(this.props.location.pathname))
+      ? this.renderManager()
+      : this.renderResident()
+  }
 }
 
-export default App;
+export default withRouter(App);

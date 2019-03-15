@@ -5,7 +5,6 @@ import NotFound from './containers/NotFound';
 import ResidentLogin from './containers/Resident/Login';
 import AppliedRoute from './components/AppliedRoute'
 import ResidentUserInfo from './containers/Resident/User/Info'
-import ManagerHome from './containers/Manager/Home';
 
 const Routes = ({ childProps }) => {
   return (
@@ -13,7 +12,6 @@ const Routes = ({ childProps }) => {
       <AppliedRoute exact path='/' component={ResidentHome} props={childProps} />
       <AppliedRoute path='/login' component={ResidentLogin} props={childProps} />
       <AppliedRoute path='/resident' component={ResidentUserInfo} props={childProps} />
-      <AppliedRoute exact path='/manager' component={ManagerHome} props={childProps} />
       <Route component={NotFound} />
     </Switch>
   )

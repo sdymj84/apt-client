@@ -10,7 +10,7 @@ const StyledContainer = styled(Container)`
   max-width: 500px;
 `
 
-export class ResidentLogin extends Component {
+export class ManagerLogin extends Component {
   state = {
     email: "",
     password: "",
@@ -30,17 +30,12 @@ export class ResidentLogin extends Component {
   handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (this.state.email === "admin@savoy.com") {
-      alert("You cannot use manager account on residents page")
-      return
-    }
-
     this.setState({ isLoading: true })
 
     try {
       const user = await Auth.signIn(this.state.email, this.state.password)
-      this.props.userHasAuthenticated(user.username)
-      console.log(user)
+      await this.props.managerHasAuthenticated(user.username)
+      this.setState({ isLoading: false })
     } catch (e) {
       console.log(e)
       alert(e.message)
@@ -49,8 +44,8 @@ export class ResidentLogin extends Component {
   }
 
   render() {
-    if (this.props.isAuthenticated) {
-      return <Redirect to='/' />
+    if (this.props.isManagerAuthenticated) {
+      return <Redirect to='/manager' />
     }
 
     return (
@@ -99,4 +94,4 @@ export class ResidentLogin extends Component {
   }
 }
 
-export default ResidentLogin
+export default ManagerLogin

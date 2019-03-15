@@ -69,7 +69,7 @@ export class ManagerHome extends Component {
           </div>
         </FlexContainer>
         <div>
-          <LinkContainer to='/login'>
+          <LinkContainer to='/manager/login'>
             <Button variant="outline-secondary" size="lg">EMPLOYEE LOG IN</Button>
           </LinkContainer>
         </div>
