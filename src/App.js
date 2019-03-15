@@ -29,7 +29,6 @@ class App extends Component {
       isAuthenticated: false,
       uid: null,
       resident: null,
-      isManagerAuthenticated: false,
       theme: Theme.Basic
     }
   }

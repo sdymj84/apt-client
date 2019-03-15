@@ -60,7 +60,7 @@ const StyledLink = styled(Link)`
 `
 
 
-export class ResidentHome extends Component {
+export class Home extends Component {
   renderLander() {
     return (
       <StyledContainer>
@@ -139,4 +139,4 @@ export class ResidentHome extends Component {
   }
 }
 
-export default ResidentHome
+export default Home
