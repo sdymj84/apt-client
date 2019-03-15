@@ -27,7 +27,6 @@ class App extends Component {
       isAuthenticated: false,
       uid: null,
       resident: null,
-      isManagerAuthenticated: false,
       theme: Theme.Basic
     }
   }
@@ -45,11 +44,6 @@ class App extends Component {
 
 
   userHasAuthenticated = async (uid) => {
-    if (uid === "58e15cde-7dca-4453-9336-0bd368960c9e") {
-      this.setState({ isManagerAuthenticated: true })
-      return
-    }
-
     let resident = null
     try {
       resident = await API.get('apt', `/residents/${uid}`)
@@ -78,13 +72,11 @@ class App extends Component {
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      isManagerAuthenticated: this.state.isManagerAuthenticated,
       uid: this.state.uid,
       userHasAuthenticated: this.userHasAuthenticated,
       resident: this.state.resident,
       theme: this.state.theme
     }
-    console.log(this.state)
     return (
       !this.state.isAuthenticating &&
       <ThemeProvider theme={this.state.theme}>

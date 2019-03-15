@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Container, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { FaUserAlt, FaUserPlus } from "react-icons/fa";
-import { GiAutoRepair, GiHouse } from "react-icons/gi";
+import { FaMoneyCheckAlt, FaUserAlt } from "react-icons/fa";
+import { GiAutoRepair } from "react-icons/gi";
+import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const StyledContainer = styled(Container)`
@@ -59,45 +60,47 @@ const StyledLink = styled(Link)`
 `
 
 
-export class ManagerHome extends Component {
+export class Home extends Component {
   renderLander() {
     return (
       <StyledContainer>
         <FlexContainer>
           <div>
             <h2>SAVOY Apartment Management Portal</h2>
+            <p>Welcome, you can pay your rent, request maintanance work, and update your info.</p>
           </div>
         </FlexContainer>
         <div>
           <LinkContainer to='/login'>
-            <Button variant="outline-secondary" size="lg">EMPLOYEE LOG IN</Button>
+            <Button variant="outline-secondary" size="lg">LOG IN</Button>
           </LinkContainer>
         </div>
       </StyledContainer>
     )
   }
 
-  renderManager() {
+  renderResident() {
     return (
       <StyledContainer>
         <FlexContainer>
           <div>
-            <h2>Welcome Manager</h2>
+            <h2>Welcome Resident</h2>
+            <p>Welcome, you can pay your rent, request maintanance work, and update your info.</p>
           </div>
         </FlexContainer>
         <Row className="icon-container">
           <Col sm={6}>
             <div>
-              <StyledLink to='/manager/new-resident'>
-                <FaUserPlus className="icon" />
+              <StyledLink to='/payment'>
+                <FaMoneyCheckAlt className="icon" />
                 <hr />
-                <p>New Resident</p>
+                <p>Payment</p>
               </StyledLink>
             </div>
           </Col>
           <Col sm={6}>
             <div>
-              <StyledLink to='/manager/maintanance'>
+              <StyledLink to='/maintanance'>
                 <GiAutoRepair className="icon" />
                 <hr />
                 <p>Maintanance</p>
@@ -106,7 +109,7 @@ export class ManagerHome extends Component {
           </Col>
           <Col sm={6}>
             <div>
-              <StyledLink to='/manager/resident'>
+              <StyledLink to='/resident'>
                 <FaUserAlt className="icon" />
                 <hr />
                 <p>User Info</p>
@@ -115,10 +118,10 @@ export class ManagerHome extends Component {
           </Col>
           <Col sm={6}>
             <div>
-              <StyledLink to='/manager/apart'>
-                <GiHouse className="icon" />
+              <StyledLink to='/contactus'>
+                <MdEmail className="icon" />
                 <hr />
-                <p>Apartment</p>
+                <p>Contact Us</p>
               </StyledLink>
             </div>
           </Col>
@@ -128,13 +131,12 @@ export class ManagerHome extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
-      this.props.isManagerAuthenticated
-        ? this.renderManager()
+      this.props.isAuthenticated
+        ? this.renderResident()
         : this.renderLander()
     )
   }
 }
 
-export default ManagerHome
+export default Home
