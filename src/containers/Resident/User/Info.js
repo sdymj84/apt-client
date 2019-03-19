@@ -1,75 +1,94 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Container, Card, Jumbotron, ListGroup } from "react-bootstrap";
-import { API } from 'aws-amplify'
+import { Container, Card, ListGroup } from "react-bootstrap";
+import moment from 'moment'
 
 const StyledContainer = styled(Container)`
-  margin-top: 30px;
-`
+  margin-top: 30px; 
+  span {
+    display: inline-block;
+    
+    :first-child {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
 
-const StyledJumbotron = styled(Jumbotron)`
-  padding: 30px;
-  p {
-    margin: 4px 0;
+  @media (max-width: 576px) {
+    span {
+      display: block;
+    }
+  }
+
+  .list-group-item:first-child {
+    border-top: 2px solid #005916;
   }
 `
 
 const StyledCard = styled(Card)`
   margin-bottom: 20px;
-  span {
-    display: inline-block;
-    width: 100%;
-    max-width: 300px;
-  }
+  
 `
 
 export class ResidentUserInfo extends Component {
-  constructor(props) {
-    super(props)
 
-    this.state = {
-
+  formatPhoneNumber = phoneNumberString => {
+    var cleaned = (phoneNumberString).replace(/\D/g, '')
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
     }
+    return null
   }
-
-  componentDidMount = async () => {
-    try {
-      const resident = await API.get('apt', `/residents/${this.props.uid}`)
-      console.log("Resident : ", resident)
-    } catch (e) {
-      console.log(e)
-      console.log("Error response : ", e.response)
-    }
-  }
-
 
   render() {
-    console.log(this.props)
+    console.log(this.props.resident)
+    const resident = this.props.resident
+
     return (
+      resident &&
       <StyledContainer>
-        <StyledJumbotron>
-          <h1>Minjun Youn</h1>
-          <h3>Unit #1916</h3>
-          <p>5620 W 134TH PL, APT 1916, OVERLAND PARK, KS 66211</p>
-          <p>Email: sdymj84@gmail.com</p>
-          <p>Phone : 913-353-6799</p>
-          <p>Co-Residents: Jihee Chung</p>
-        </StyledJumbotron>
+        <StyledCard border="success">
+          <Card.Body>
+            <Card.Title>
+              <h1>{resident.firstName} {resident.lastName}</h1>
+              <h3>Unit #{resident.apartId}</h3>
+            </Card.Title>
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                <span>Address</span>
+                <span>5620 W 134TH PL, APT 1916, OVERLAND PARK, KS 66211</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <span>Email</span>
+                <span>{resident.email}</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <span>Phone</span>
+                <span>{this.formatPhoneNumber(resident.phone)}</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <span>Co-Residents</span>
+                <span>Jihee Chung</span>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card.Body>
+        </StyledCard>
         <StyledCard border="secondary">
           <Card.Body>
             <Card.Title>Lease Information</Card.Title>
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <span>Move In Date</span>
-                <span>9/24/2016</span>
+                <span>{moment(resident.moveInDate).format('L')}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Lease From Date</span>
-                <span>9/24/2018</span>
+                <span>{moment(resident.leaseStartDate).format('L')}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Lease To Date</span>
-                <span>3/23/2019</span>
+                <span>{moment(resident.leaseEndDate).format('L')}</span>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>
@@ -77,24 +96,26 @@ export class ResidentUserInfo extends Component {
         <StyledCard border="secondary">
           <Card.Body>
             <Card.Title>Vehicle Information</Card.Title>
-            <ListGroup variant="flush">
-              <ListGroup.Item>
-                <span>My Car</span>
-                <span>2011 Kia Soul</span>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <span>License Plate</span>
-                <span>263KJL</span>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <span>State</span>
-                <span>KS</span>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <span>Color</span>
-                <span>White</span>
-              </ListGroup.Item>
-            </ListGroup>
+            {resident.vehicles.map((vehicle, i) =>
+              <ListGroup variant="flush" key={i}>
+                <ListGroup.Item>
+                  <span>My Car</span>
+                  <span>{vehicle.year} {vehicle.make} {vehicle.model}</span>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <span>License Plate</span>
+                  <span>{vehicle.licensePlate}</span>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <span>State</span>
+                  <span>{vehicle.state}</span>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <span>Color</span>
+                  <span>{vehicle.color}</span>
+                </ListGroup.Item>
+              </ListGroup>
+            )}
           </Card.Body>
         </StyledCard>
         <StyledCard border="secondary">
@@ -103,19 +124,19 @@ export class ResidentUserInfo extends Component {
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <span>Subscribe to Email Notifications</span>
-                <span>Yes</span>
+                <span>{resident.notification.email ? "Yes" : "No"}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Subscribe to Voice Calls</span>
-                <span>Yes</span>
+                <span>{resident.notification.voiceCall ? "Yes" : "No"}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Mobile Phone Number for Texts</span>
-                <span>(913) 353-6799</span>
+                <span>{this.formatPhoneNumber(resident.phone)}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Allow Text (SMS) Notifications</span>
-                <span>Yes - Phone Number Confirmed</span>
+                <span>{resident.notification.text ? "Yes" : "No"}</span>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>
