@@ -72,7 +72,7 @@ export class Home extends Component {
         </FlexContainer>
         <div>
           <LinkContainer to='/login'>
-            <Button variant="outline-secondary" size="lg">LOG IN</Button>
+            <Button variant={`outline-${this.props.theme.buttonTheme}`} size="lg">LOG IN</Button>
           </LinkContainer>
         </div>
       </StyledContainer>

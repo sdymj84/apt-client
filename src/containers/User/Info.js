@@ -74,7 +74,7 @@ export class ResidentUserInfo extends Component {
             </ListGroup>
           </Card.Body>
         </StyledCard>
-        <StyledCard border="secondary">
+        <StyledCard border={this.props.theme.buttonTheme}>
           <Card.Body>
             <Card.Title>Lease Information</Card.Title>
             <ListGroup variant="flush">
@@ -93,7 +93,7 @@ export class ResidentUserInfo extends Component {
             </ListGroup>
           </Card.Body>
         </StyledCard>
-        <StyledCard border="secondary">
+        <StyledCard border={this.props.theme.buttonTheme}>
           <Card.Body>
             <Card.Title>Vehicle Information</Card.Title>
             {resident.vehicles.map((vehicle, i) =>
@@ -118,7 +118,7 @@ export class ResidentUserInfo extends Component {
             )}
           </Card.Body>
         </StyledCard>
-        <StyledCard border="secondary">
+        <StyledCard border={this.props.theme.buttonTheme}>
           <Card.Body>
             <Card.Title>User Settings</Card.Title>
             <ListGroup variant="flush">
