@@ -10,12 +10,25 @@ const StyledContainer = styled(Container)`
   max-width: 400px;
 `
 
-export class ChangePassword extends Component {
+export class InitialPasswordSetup extends Component {
   state = {
     oldPassword: "",
     newPassword: "",
     newPasswordConfirm: "",
     isLoading: false,
+  }
+
+  componentDidMount = async () => {
+    const params = new URLSearchParams(this.props.location.search)
+    const username = params.get('username')
+    const code = params.get('code')
+    if (username && code) {
+      try {
+        await Auth.confirmSignUp(username, code)
+      } catch (e) {
+        console.log(e)
+      }
+    }
   }
 
   validateForm() {
@@ -42,19 +55,27 @@ export class ChangePassword extends Component {
     }
 
     try {
-      const user = await Auth.currentAuthenticatedUser()
+      const user = await this.residentSignIn()
       await Auth.changePassword(user, this.state.oldPassword, this.state.newPassword)
       this.setState({ isLoading: false })
       alert('Password is successfully changed!')
       this.props.history.push('/')
     } catch (e) {
       console.log(e)
-      if (e.message === "Incorrect username or password.") {
-        alert("Old password is wrong.")
-      } else {
-        alert(e.message)
-      }
+      alert(e.message)
       this.setState({ isLoading: false })
+    }
+  }
+
+  residentSignIn = async () => {
+    const params = new URLSearchParams(this.props.location.search)
+    const username = params.get('username')
+    try {
+      const user = await Auth.signIn(username, this.state.oldPassword)
+      this.props.userHasAuthenticated(user.username)
+      return user
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -108,4 +129,4 @@ export class ChangePassword extends Component {
   }
 }
 
-export default ChangePassword
+export default InitialPasswordSetup
