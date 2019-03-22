@@ -43,7 +43,11 @@ export class Login extends Component {
       console.log(user)
     } catch (e) {
       console.log(e)
-      alert(e.message)
+      if (e.code === "UserNotConfirmedException") {
+        alert("You need to change password before login, please check email.")
+      } else {
+        alert(e.message)
+      }
       this.setState({ isLoading: false })
     }
   }

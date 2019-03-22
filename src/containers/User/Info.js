@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Container, Card, ListGroup } from "react-bootstrap";
+import { Container, Card, ListGroup, Button } from "react-bootstrap";
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 const StyledContainer = styled(Container)`
@@ -22,6 +23,13 @@ const StyledContainer = styled(Container)`
 
   .list-group-item:first-child {
     border-top: 2px solid #005916;
+  }
+
+  .btn-container {
+    text-align: right;
+  }
+  button {
+    margin: 0 0 5px 5px;
   }
 `
 
@@ -48,6 +56,16 @@ export class ResidentUserInfo extends Component {
     return (
       resident &&
       <StyledContainer>
+        <div className="btn-container">
+          <Button variant={`outline-${this.props.theme.buttonTheme}`}>
+            Edit Profile
+          </Button>
+          <Link to='/resident/change-password'>
+            <Button variant={`outline-${this.props.theme.buttonTheme}`}>
+              Change Password
+            </Button>
+          </Link>
+        </div>
         <StyledCard border="success">
           <Card.Body>
             <Card.Title>
@@ -124,11 +142,11 @@ export class ResidentUserInfo extends Component {
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <span>Subscribe to Email Notifications</span>
-                <span>{resident.notification.email ? "Yes" : "No"}</span>
+                <span>{resident.notifications.isEmailSub ? "Yes" : "No"}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Subscribe to Voice Calls</span>
-                <span>{resident.notification.voiceCall ? "Yes" : "No"}</span>
+                <span>{resident.notifications.isVoiceCallSub ? "Yes" : "No"}</span>
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Mobile Phone Number for Texts</span>
@@ -136,7 +154,7 @@ export class ResidentUserInfo extends Component {
               </ListGroup.Item>
               <ListGroup.Item>
                 <span>Allow Text (SMS) Notifications</span>
-                <span>{resident.notification.text ? "Yes" : "No"}</span>
+                <span>{resident.notifications.isTextSub ? "Yes" : "No"}</span>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>
