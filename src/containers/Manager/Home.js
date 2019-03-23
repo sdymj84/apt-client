@@ -49,7 +49,7 @@ const FlexContainer = styled.div`
 `
 
 const StyledLink = styled(Link)`
-  color: #333333;
+  color: ${props => props.theme.iconColor};
   text-decoration: none;
 
   :hover, :active {
@@ -69,8 +69,8 @@ export class ManagerHome extends Component {
           </div>
         </FlexContainer>
         <div>
-          <LinkContainer to='/login'>
-            <Button variant="outline-secondary" size="lg">EMPLOYEE LOG IN</Button>
+          <LinkContainer to='/manager/login'>
+            <Button variant={`outline-${this.props.theme.buttonTheme}`} size="lg">EMPLOYEE LOG IN</Button>
           </LinkContainer>
         </div>
       </StyledContainer>

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Form, Row, Col, Container } from "react-bootstrap";
 import { Auth } from "aws-amplify";
 import { Redirect } from "react-router-dom";
-import LoaderButton from "../../components/LoaderButton.js";
+import LoaderButton from "../components/LoaderButton.js";
 import styled from 'styled-components'
 
 const StyledContainer = styled(Container)`
@@ -10,7 +10,7 @@ const StyledContainer = styled(Container)`
   max-width: 500px;
 `
 
-export class ResidentLogin extends Component {
+export class Login extends Component {
   state = {
     email: "",
     password: "",
@@ -30,6 +30,11 @@ export class ResidentLogin extends Component {
   handleSubmit = async (e) => {
     e.preventDefault()
 
+    if (this.state.email === "admin@savoy.com") {
+      alert("You cannot use manager account on residents page")
+      return
+    }
+
     this.setState({ isLoading: true })
 
     try {
@@ -38,7 +43,11 @@ export class ResidentLogin extends Component {
       console.log(user)
     } catch (e) {
       console.log(e)
-      alert(e.message)
+      if (e.code === "UserNotConfirmedException") {
+        alert("You need to change password before login, please check email.")
+      } else {
+        alert(e.message)
+      }
       this.setState({ isLoading: false })
     }
   }
@@ -78,7 +87,7 @@ export class ResidentLogin extends Component {
             <Col sm={{ span: 10, offset: 2 }}>
               <LoaderButton
                 block
-                variant="outline-secondary"
+                variant={`outline-${this.props.theme.buttonTheme}`}
                 disabled={!this.validateForm()}
                 type="submit"
                 isLoading={this.state.isLoading}
@@ -94,4 +103,4 @@ export class ResidentLogin extends Component {
   }
 }
 
-export default ResidentLogin
+export default Login

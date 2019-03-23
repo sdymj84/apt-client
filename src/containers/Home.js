@@ -50,7 +50,7 @@ const FlexContainer = styled.div`
 `
 
 const StyledLink = styled(Link)`
-  color: #333333;
+  color: ${props => props.theme.iconColor};
   text-decoration: none;
 
   :hover, :active {
@@ -60,7 +60,7 @@ const StyledLink = styled(Link)`
 `
 
 
-export class ResidentHome extends Component {
+export class Home extends Component {
   renderLander() {
     return (
       <StyledContainer>
@@ -72,7 +72,7 @@ export class ResidentHome extends Component {
         </FlexContainer>
         <div>
           <LinkContainer to='/login'>
-            <Button variant="outline-secondary" size="lg">LOG IN</Button>
+            <Button variant={`outline-${this.props.theme.buttonTheme}`} size="lg">LOG IN</Button>
           </LinkContainer>
         </div>
       </StyledContainer>
@@ -139,4 +139,4 @@ export class ResidentHome extends Component {
   }
 }
 
-export default ResidentHome
+export default Home

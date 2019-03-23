@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import Routes from './Routes'
 import { Auth, API } from 'aws-amplify'
 import Theme from './theme'
 import { ThemeProvider } from 'styled-components'
 
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: ${props => props.theme.backgroundColor};
+  }
+`
 
 const StyledContainer = styled(Container)`
   margin-top: 15px;
@@ -25,9 +32,7 @@ class App extends Component {
     this.state = {
       isAuthenticating: true,
       isAuthenticated: false,
-      uid: null,
       resident: null,
-      isManagerAuthenticated: false,
       theme: Theme.Basic
     }
   }
@@ -43,24 +48,18 @@ class App extends Component {
     this.setState({ isAuthenticating: false })
   }
 
-
   userHasAuthenticated = async (uid) => {
-    if (uid === "58e15cde-7dca-4453-9336-0bd368960c9e") {
-      this.setState({ isManagerAuthenticated: true })
-      return
-    }
-
     let resident = null
-    try {
-      resident = await API.get('apt', `/residents/${uid}`)
-    } catch (e) {
-      console.log(e)
-      console.log("Error response : ", e.response)
+    if (uid) {
+      try {
+        resident = await API.get('apt', `/residents/${uid}`)
+      } catch (e) {
+        console.log(e, e.response)
+      }
     }
 
     this.setState({
       isAuthenticated: uid ? true : false,
-      uid,
       resident
     })
   }
@@ -78,17 +77,15 @@ class App extends Component {
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      isManagerAuthenticated: this.state.isManagerAuthenticated,
-      uid: this.state.uid,
       userHasAuthenticated: this.userHasAuthenticated,
       resident: this.state.resident,
       theme: this.state.theme
     }
-    console.log(this.state)
     return (
       !this.state.isAuthenticating &&
       <ThemeProvider theme={this.state.theme}>
         <StyledContainer>
+          <GlobalStyle />
           <Navbar variant="light" bg="light" expand="md">
             <Navbar.Brand>
               <Link to='/'>SAVOY</Link>
@@ -112,4 +109,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
