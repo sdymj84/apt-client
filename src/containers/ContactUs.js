@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
 import { Form, Row, Col, Container } from "react-bootstrap";
-import { Auth } from "aws-amplify";
-import { Redirect } from "react-router-dom";
-import LoaderButton from "../../components/LoaderButton.js";
+import LoaderButton from "../components/LoaderButton.js";
 import styled from 'styled-components'
+
 
 const StyledContainer = styled(Container)`
   margin-top: 5em;
   max-width: 500px;
 `
 
-export class ManagerLogin extends Component {
+export class ContactUs extends Component {
   state = {
-    email: "",
-    password: "",
+    subject: "",
+    content: "",
     isLoading: false,
   }
 
   validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    return this.state.subject.length > 0 && this.state.content.length > 0;
   }
 
   handleChange = (e) => {
@@ -33,44 +32,39 @@ export class ManagerLogin extends Component {
     this.setState({ isLoading: true })
 
     try {
-      const user = await Auth.signIn(this.state.email, this.state.password)
-      await this.props.managerHasAuthenticated(user.username)
-      this.setState({ isLoading: false })
+      alert("Email is sent!")
+      console.log("Submitted", this.state.subject, this.state.content)
+      this.props.history.push('/')
     } catch (e) {
       console.log(e)
-      alert(e.message)
       this.setState({ isLoading: false })
     }
   }
 
   render() {
-    if (this.props.isManagerAuthenticated) {
-      return <Redirect to='/manager' />
-    }
-
     return (
       <StyledContainer>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Group as={Row} controlId="email">
+          <Form.Group as={Row} controlId="subject">
             <Form.Label column sm={2}>
-              Email
+              Subject
               </Form.Label>
             <Col sm={10}>
-              <Form.Control type="email" placeholder="Email"
+              <Form.Control type="text"
                 onChange={this.handleChange}
-                value={this.state.email}
+                value={this.state.subject}
                 autoFocus />
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} controlId="password">
+          <Form.Group as={Row} controlId="content">
             <Form.Label column sm={2}>
-              Password
+              Content
             </Form.Label>
             <Col sm={10}>
-              <Form.Control type="password" placeholder="Password"
+              <Form.Control as="textarea" rows="10"
                 onChange={this.handleChange}
-                value={this.state.password} />
+                value={this.state.content} />
             </Col>
           </Form.Group>
 
@@ -82,8 +76,8 @@ export class ManagerLogin extends Component {
                 disabled={!this.validateForm()}
                 type="submit"
                 isLoading={this.state.isLoading}
-                text="Login"
-                loadingText="Logging in…"
+                text="Submit"
+                loadingText="Submitting..."
               />
 
             </Col>
@@ -94,4 +88,4 @@ export class ManagerLogin extends Component {
   }
 }
 
-export default ManagerLogin
+export default ContactUs
