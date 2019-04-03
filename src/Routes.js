@@ -18,10 +18,7 @@ const Routes = ({ childProps }) => {
       <AuthenticatedRoute exact path='/resident' component={ResidentUserInfo} props={childProps} />
       <AuthenticatedRoute path='/resident/change-password' component={ChangePassword} props={childProps} />
       <AppliedRoute path='/resident/initial-password-setup' component={InitialPasswordSetup} props={childProps} />
-<<<<<<< Updated upstream
-=======
       <AuthenticatedRoute path='/contactus' component={ContactUs} props={childProps} />
->>>>>>> Stashed changes
       <Route component={NotFound} />
     </Switch>
   )
