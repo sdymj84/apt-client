@@ -4,6 +4,8 @@ import { FiRefreshCw } from "react-icons/fi";
 import styled from 'styled-components'
 
 const StyledContainer = styled.div`
+  margin: ${props => props.margin || "1em 0"};
+  
   .LoaderButton .spinning {
     margin-right: 7px;
     position: relative;
@@ -19,7 +21,7 @@ const StyledContainer = styled.div`
 const LoaderButton = ({ isLoading, text, loadingText,
   disabled, ...rest }) => {
   return (
-    <StyledContainer>
+    <StyledContainer margin={rest.margin}>
       <Button
         {...rest}
         className="LoaderButton"

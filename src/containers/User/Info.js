@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Container, Card, ListGroup, Button } from "react-bootstrap";
+import { Container, Card, ListGroup, Button, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 const StyledContainer = styled(Container)`
   margin-top: 30px; 
-  span {
+  /* span {
     display: inline-block;
     
     :first-child {
@@ -19,7 +19,7 @@ const StyledContainer = styled(Container)`
     span {
       display: block;
     }
-  }
+  } */
 
   .list-group-item:first-child {
     border-top: 2px solid #005916;
@@ -50,18 +50,18 @@ export class ResidentUserInfo extends Component {
   }
 
   render() {
-    console.log(this.props.resident)
-    const resident = this.props.resident
+    console.log(this.props)
+    const { apart, resident, theme } = this.props
 
     return (
       resident &&
       <StyledContainer>
         <div className="btn-container">
-          <Button variant={`outline-${this.props.theme.buttonTheme}`}>
+          <Button variant={`outline-${theme.buttonTheme}`}>
             Edit Profile
           </Button>
           <Link to='/resident/change-password'>
-            <Button variant={`outline-${this.props.theme.buttonTheme}`}>
+            <Button variant={`outline-${theme.buttonTheme}`}>
               Change Password
             </Button>
           </Link>
@@ -74,87 +74,124 @@ export class ResidentUserInfo extends Component {
             </Card.Title>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <span>Address</span>
-                <span>5620 W 134TH PL, APT 1916, OVERLAND PARK, KS 66211</span>
+                <Row>
+                  <Col sm={4}>Address</Col>
+                  <Col sm={8}>{apart.address.street}, Apt {apart.address.apt},
+                  {} {apart.address.city}, {apart.address.state}
+                    {} {apart.address.zipcode}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Email</span>
-                <span>{resident.email}</span>
+                <Row>
+                  <Col>Email</Col>
+                  <Col>{resident.email}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Phone</span>
-                <span>{this.formatPhoneNumber(resident.phone)}</span>
+                <Row>
+                  <Col>Phone</Col>
+                  <Col>{this.formatPhoneNumber(resident.phone)}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Co-Residents</span>
-                <span>Jihee Chung</span>
+                <Row>
+                  <Col>Co-Residents</Col>
+                  <Col>
+                    {apart.residents.map((coResident, i) =>
+                      (coResident.name !== resident.firstName + ' ' + resident.lastName)
+                      && <div key={i}>{coResident.name}</div>
+                    )}
+                  </Col>
+                </Row>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>
         </StyledCard>
-        <StyledCard border={this.props.theme.buttonTheme}>
+        <StyledCard border={theme.buttonTheme}>
           <Card.Body>
             <Card.Title>Lease Information</Card.Title>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <span>Move In Date</span>
-                <span>{moment(resident.moveInDate).format('L')}</span>
+                <Row>
+                  <Col>Move In Date</Col>
+                  <Col>{moment(resident.moveInDate).format('L')}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Lease From Date</span>
-                <span>{moment(resident.leaseStartDate).format('L')}</span>
+                <Row>
+                  <Col>Lease From Date</Col>
+                  <Col>{moment(resident.leaseStartDate).format('L')}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Lease To Date</span>
-                <span>{moment(resident.leaseEndDate).format('L')}</span>
+                <Row>
+                  <Col>Lease To Date</Col>
+                  <Col>{moment(resident.leaseEndDate).format('L')}</Col>
+                </Row>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>
         </StyledCard>
-        <StyledCard border={this.props.theme.buttonTheme}>
+        <StyledCard border={theme.buttonTheme}>
           <Card.Body>
             <Card.Title>Vehicle Information</Card.Title>
             {resident.vehicles.map((vehicle, i) =>
               <ListGroup variant="flush" key={i}>
                 <ListGroup.Item>
-                  <span>My Car</span>
-                  <span>{vehicle.year} {vehicle.make} {vehicle.model}</span>
+                  <Row>
+                    <Col>My Car</Col>
+                    <Col>{vehicle.year} {vehicle.make} {vehicle.model}</Col>
+                  </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span>License Plate</span>
-                  <span>{vehicle.licensePlate}</span>
+                  <Row>
+                    <Col>License Plate</Col>
+                    <Col>{vehicle.licensePlate}</Col>
+                  </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span>State</span>
-                  <span>{vehicle.state}</span>
+                  <Row>
+                    <Col>State</Col>
+                    <Col>{vehicle.state}</Col>
+                  </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span>Color</span>
-                  <span>{vehicle.color}</span>
+                  <Row>
+                    <Col>Color</Col>
+                    <Col>{vehicle.color}</Col>
+                  </Row>
                 </ListGroup.Item>
               </ListGroup>
             )}
           </Card.Body>
         </StyledCard>
-        <StyledCard border={this.props.theme.buttonTheme}>
+        <StyledCard border={theme.buttonTheme}>
           <Card.Body>
             <Card.Title>User Settings</Card.Title>
             <ListGroup variant="flush">
               <ListGroup.Item>
-                <span>Subscribe to Email Notifications</span>
-                <span>{resident.notifications.isEmailSub ? "Yes" : "No"}</span>
+                <Row>
+                  <Col>Subscribe to Email Notifications</Col>
+                  <Col>{resident.notifications.isEmailSub ? "Yes" : "No"}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Subscribe to Voice Calls</span>
-                <span>{resident.notifications.isVoiceCallSub ? "Yes" : "No"}</span>
+                <Row>
+                  <Col>Subscribe to Voice Calls</Col>
+                  <Col>{resident.notifications.isVoiceCallSub ? "Yes" : "No"}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Mobile Phone Number for Texts</span>
-                <span>{this.formatPhoneNumber(resident.phone)}</span>
+                <Row>
+                  <Col>Mobile Phone Number for Texts</Col>
+                  <Col>{this.formatPhoneNumber(resident.phone)}</Col>
+                </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Allow Text (SMS) Notifications</span>
-                <span>{resident.notifications.isTextSub ? "Yes" : "No"}</span>
+                <Row>
+                  <Col>Allow Text (SMS) Notifications</Col>
+                  <Col>{resident.notifications.isTextSub ? "Yes" : "No"}</Col>
+                </Row>
               </ListGroup.Item>
             </ListGroup>
           </Card.Body>

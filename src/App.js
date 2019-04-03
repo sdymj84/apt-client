@@ -33,6 +33,7 @@ class App extends Component {
       isAuthenticating: true,
       isAuthenticated: false,
       resident: null,
+      apart: null,
       theme: Theme.Basic
     }
   }
@@ -50,9 +51,12 @@ class App extends Component {
 
   userHasAuthenticated = async (uid) => {
     let resident = null
+    let apart = null
+    console.log(uid)
     if (uid) {
       try {
         resident = await API.get('apt', `/residents/${uid}`)
+        apart = await API.get('apt', `/aparts/${resident.apartId}`)
       } catch (e) {
         console.log(e, e.response)
       }
@@ -60,7 +64,8 @@ class App extends Component {
 
     this.setState({
       isAuthenticated: uid ? true : false,
-      resident
+      resident,
+      apart
     })
   }
 
@@ -79,6 +84,7 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       resident: this.state.resident,
+      apart: this.state.apart,
       theme: this.state.theme
     }
     return (
