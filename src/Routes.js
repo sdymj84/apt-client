@@ -9,6 +9,7 @@ import UnauthenticatedRoute from './components/UnauthenticatedRoute'
 import ResidentUserInfo from './containers/User/Info'
 import ChangePassword from './containers/User/ChangePassword';
 import InitialPasswordSetup from './containers/User/InitialPasswordSetup';
+import ContactUs from './containers/ContactUs';
 
 const Routes = ({ childProps }) => {
   return (

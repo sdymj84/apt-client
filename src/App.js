@@ -8,6 +8,7 @@ import Routes from './Routes'
 import { Auth, API } from 'aws-amplify'
 import Theme from './theme'
 import { ThemeProvider } from 'styled-components'
+import AnnouncementAlert from './components/AnnouncementAlert';
 
 
 const GlobalStyle = createGlobalStyle`
@@ -34,6 +35,7 @@ class App extends Component {
       isAuthenticated: false,
       resident: null,
       apart: null,
+      isAnnouncementConfirmed: false,
       theme: Theme.Basic
     }
   }
@@ -41,6 +43,7 @@ class App extends Component {
   componentDidMount = async () => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser()
+      console.log(currentUser)
       await this.userHasAuthenticated(currentUser.username)
     } catch (e) {
       console.log(e, e.response)
@@ -52,6 +55,7 @@ class App extends Component {
   userHasAuthenticated = async (uid) => {
     let resident = null
     let apart = null
+    let isAnnouncementConfirmed = false
     console.log(uid)
     if (uid) {
       try {
@@ -62,10 +66,17 @@ class App extends Component {
       }
     }
 
+    if (apart) {
+      const i = apart.residents.findIndex(res =>
+        res.id === resident.residentId)
+      isAnnouncementConfirmed = apart.residents[i].isAnnouncementConfirmed
+    }
+
     this.setState({
       isAuthenticated: uid ? true : false,
       resident,
-      apart
+      apart,
+      isAnnouncementConfirmed
     })
   }
 
@@ -76,6 +87,19 @@ class App extends Component {
     } catch (e) {
       console.log(e)
       alert(e.message)
+    }
+  }
+
+  handleDismissAlert = async () => {
+    try {
+      await API.put('apt',
+        `/aparts/${this.state.apart.apartId}/confirmAnnouncement/${this.state.resident.residentId}`, {
+          body: {
+            isAnnouncementConfirmed: true
+          }
+        })
+    } catch (e) {
+      console.log(e, e.response)
     }
   }
 
@@ -108,6 +132,14 @@ class App extends Component {
               </Nav>
             </Navbar.Collapse>
           </Navbar>
+
+          {this.state.apart &&
+            <AnnouncementAlert
+              apart={this.state.apart}
+              isAnnouncementConfirmed={this.state.isAnnouncementConfirmed}
+              handleDismissAlert={this.handleDismissAlert}
+            />}
+
           <Routes childProps={childProps} />
         </StyledContainer>
       </ThemeProvider>

@@ -12,7 +12,7 @@ const StyledContainer = styled(Container)`
 
 export class InitialPasswordSetup extends Component {
   state = {
-    oldPassword: "",
+    tempPassword: "",
     newPassword: "",
     newPasswordConfirm: "",
     isLoading: false,
@@ -25,6 +25,7 @@ export class InitialPasswordSetup extends Component {
     if (username && code) {
       try {
         await Auth.confirmSignUp(username, code)
+        console.log("User has confirmed via email")
       } catch (e) {
         console.log(e)
       }
@@ -32,7 +33,7 @@ export class InitialPasswordSetup extends Component {
   }
 
   validateForm() {
-    return this.state.oldPassword.length > 0
+    return this.state.tempPassword.length > 0
       && this.state.newPassword.length > 0
       && this.state.newPasswordConfirm.length > 0;
   }
@@ -56,7 +57,7 @@ export class InitialPasswordSetup extends Component {
 
     try {
       const user = await this.residentSignIn()
-      await Auth.changePassword(user, this.state.oldPassword, this.state.newPassword)
+      await Auth.changePassword(user, this.state.tempPassword, this.state.newPassword)
       this.setState({ isLoading: false })
       alert('Password is successfully changed!')
       this.props.history.push('/')
@@ -71,11 +72,17 @@ export class InitialPasswordSetup extends Component {
     const params = new URLSearchParams(this.props.location.search)
     const username = params.get('username')
     try {
-      const user = await Auth.signIn(username, this.state.oldPassword)
+      const user = await Auth.signIn(username, this.state.tempPassword)
       this.props.userHasAuthenticated(user.username)
       return user
     } catch (e) {
       console.log(e)
+      if (e.message === "Incorrect username or password.") {
+        alert("Temporary password is wrong.")
+      } else {
+        alert(e.message)
+      }
+      this.setState({ isLoading: false })
     }
   }
 
@@ -83,13 +90,13 @@ export class InitialPasswordSetup extends Component {
     return (
       <StyledContainer>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Group controlId="oldPassword">
+          <Form.Group controlId="tempPassword">
             <Form.Label>
-              Old Password
+              Temporary Password
             </Form.Label>
             <Form.Control type="password"
               onChange={this.handleChange}
-              value={this.state.oldPassword}
+              value={this.state.tempPassword}
               autoFocus />
           </Form.Group>
 
