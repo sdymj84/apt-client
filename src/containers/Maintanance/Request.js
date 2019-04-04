@@ -6,11 +6,13 @@
 
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
-import { Container, Button, Form, Col, Row, Dropdown, DropdownButton } from "react-bootstrap";
+import { Container, Button, Form, Col, Row, Dropdown, OverlayTrigger, Popover } from "react-bootstrap";
 import Amplify, { API, Auth } from 'aws-amplify'
 import LoaderButton from '../../components/LoaderButton'
 import ConfirmModal from '../../components/ConfirmModal'
 import AlertModal from '../../components/AlertModal'
+import config from '../../config'
+import { FiAlertCircle } from 'react-icons/fi'
 
 
 const StyledContainer = styled(Container)`
@@ -34,7 +36,7 @@ const StyledForm = styled(Form)`
 export class Request extends Component {
   constructor(props) {
     super(props)
-
+    this.file = ""
     this.state = {
       isLoading: false,
       priority: "",
@@ -42,12 +44,15 @@ export class Request extends Component {
       description: "",
       accessInst: "",
       permissionToEnter: "",
-      attachment: "",
+      modalShow: false,
+      modalMessage: "",
     }
   }
 
   validateForm = () => {
-    return true
+    const { priority, where, description, permissionToEnter } = this.state
+    return priority.length > 0 && where.length > 0
+      && description.length > 0 && permissionToEnter.length > 0
   }
 
   handleChange = (e) => {
@@ -63,8 +68,26 @@ export class Request extends Component {
     })
   }
 
+  handleFileChange = (e) => {
+    this.file = e.target.files[0]
+  }
+
+  handleModalClose = () => {
+    this.setState({ modalShow: false })
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
+
+    if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
+      this.setState({
+        modalShow: true,
+        modalMessage: `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000} MB.`
+      })
+      return
+    }
+
+
   }
 
   render() {
@@ -94,22 +117,30 @@ export class Request extends Component {
           <Form.Group as={Row} controlId="where">
             <Form.Label column sm={3}>Where*</Form.Label>
             <Col sm={9}>
-              <Form.Control type="text" />
+              <Form.Control type="text"
+                onChange={this.handleChange}
+                value={this.state.where} />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} controlId="description">
             <Form.Label column sm={3}>Full Description*</Form.Label>
             <Col sm={9}>
-              <Form.Control as="textarea" rows={5} />
-              <div>1499 characters remaining</div>
+              <Form.Control as="textarea" rows={5}
+                maxLength={1500}
+                onChange={this.handleChange}
+                value={this.state.description} />
+              <div><span>{1500 - this.state.description.length}</span> characters remaining</div>
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} controlId="accessInst">
             <Form.Label column sm={3}>Access Instructions</Form.Label>
             <Col sm={9}>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control as="textarea" rows={3}
+                onChange={this.handleChange}
+                value={this.state.accessInst} />
+              <div><span>{1500 - this.state.accessInst.length}</span> characters remaining</div>
             </Col>
           </Form.Group>
 
@@ -131,9 +162,20 @@ export class Request extends Component {
           </Form.Group>
 
           <Form.Group as={Row} controlId="attachment">
-            <Form.Label column sm={3}>Attachment</Form.Label>
+            <Form.Label column sm={3}>
+              Attachment
+              <OverlayTrigger trigger="hover" placement="right" overlay={(
+                <Popover id="popover-basic">
+                  {`Maximum size of the attachment file is ${config.MAX_ATTACHMENT_SIZE / 1000000}MB`}
+                </Popover>
+              )}>
+                <FiAlertCircle />
+              </OverlayTrigger>
+
+            </Form.Label>
             <Col sm={9} className="d-flex align-items-center">
-              <Form.Control type="file" />
+              <Form.Control type="file"
+                onChange={this.handleFileChange} />
             </Col>
           </Form.Group>
 
@@ -148,8 +190,13 @@ export class Request extends Component {
               loadingText="Submitting…"
             />
           </Form.Group>
-
         </StyledForm>
+
+        <AlertModal
+          modalShow={this.state.modalShow}
+          modalClose={this.handleModalClose}
+          modalMessage={this.state.modalMessage}
+          theme={this.props.theme} />
       </StyledContainer>
     )
   }
