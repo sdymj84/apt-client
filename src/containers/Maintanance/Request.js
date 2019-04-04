@@ -7,17 +7,22 @@
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import { Container, Button, Form, Col, Row, Dropdown, OverlayTrigger, Popover } from "react-bootstrap";
-import Amplify, { API, Auth } from 'aws-amplify'
 import LoaderButton from '../../components/LoaderButton'
 import ConfirmModal from '../../components/ConfirmModal'
 import AlertModal from '../../components/AlertModal'
 import config from '../../config'
 import { FiAlertCircle } from 'react-icons/fi'
+import { API } from 'aws-amplify'
+import { s3Upload } from '../../libs/awsLib'
 
 
 const StyledContainer = styled(Container)`
   margin-top: 3em;
   max-width: 550px;
+  .attachment-tooltip {
+    color: navy;
+    cursor: pointer;
+  }
 `
 
 const StyledForm = styled(Form)`
@@ -44,8 +49,10 @@ export class Request extends Component {
       description: "",
       accessInst: "",
       permissionToEnter: "",
+      attachment: "",
       modalShow: false,
       modalMessage: "",
+      modalActive: 0,
     }
   }
 
@@ -74,20 +81,47 @@ export class Request extends Component {
 
   handleModalClose = () => {
     this.setState({ modalShow: false })
+    this.state.modalActive == 2
+      && this.props.history.push('/')
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
 
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
       this.setState({
         modalShow: true,
+        modalActive: 1,
         modalMessage: `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE / 1000000} MB.`
       })
       return
     }
 
+    this.setState({ isLoading: true })
 
+    try {
+      const attachment = this.file
+        ? await s3Upload(this.file)
+        : null
+
+      const body = {
+        ...this.state,
+        apartId: this.props.apart.apartId,
+        attachment
+      }
+
+      await API.post('apt', '/requests', { body })
+
+      this.setState({
+        modalShow: true,
+        modalActive: 2,
+        modalMessage: "Maintanace request is successfully posted."
+          + "We will be visiting normally in 1-2 days, thank you."
+      })
+      // this.props.history.push('/')
+    } catch (e) {
+      console.log(e, e.response)
+    }
   }
 
   render() {
@@ -169,7 +203,7 @@ export class Request extends Component {
                   {`Maximum size of the attachment file is ${config.MAX_ATTACHMENT_SIZE / 1000000}MB`}
                 </Popover>
               )}>
-                <FiAlertCircle />
+                <FiAlertCircle className="attachment-tooltip" />
               </OverlayTrigger>
 
             </Form.Label>

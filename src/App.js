@@ -43,7 +43,6 @@ class App extends Component {
   componentDidMount = async () => {
     try {
       const currentUser = await Auth.currentAuthenticatedUser()
-      console.log(currentUser)
       await this.userHasAuthenticated(currentUser.username)
     } catch (e) {
       console.log(e, e.response)
@@ -56,7 +55,6 @@ class App extends Component {
     let resident = null
     let apart = null
     let isAnnouncementConfirmed = false
-    console.log(uid)
     if (uid) {
       try {
         resident = await API.get('apt', `/residents/${uid}`)
