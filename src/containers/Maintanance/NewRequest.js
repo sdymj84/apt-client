@@ -38,7 +38,7 @@ const StyledForm = styled(Form)`
   }
 `
 
-export class Request extends Component {
+export class NewRequest extends Component {
   constructor(props) {
     super(props)
     this.file = ""
@@ -118,9 +118,9 @@ export class Request extends Component {
         modalMessage: "Maintanace request is successfully posted."
           + "We will be visiting normally in 1-2 days, thank you."
       })
-      // this.props.history.push('/')
     } catch (e) {
       console.log(e, e.response)
+      this.setState({ isLoading: false })
     }
   }
 
@@ -236,4 +236,4 @@ export class Request extends Component {
   }
 }
 
-export default Request
+export default NewRequest
