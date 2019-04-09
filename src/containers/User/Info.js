@@ -57,7 +57,8 @@ export class ResidentUserInfo extends Component {
       resident &&
       <StyledContainer>
         <div className="btn-container">
-          <Button variant={`outline-${theme.buttonTheme}`}>
+          <Button
+            variant={`outline-${theme.buttonTheme}`}>
             Edit Profile
           </Button>
           <Link to='/resident/change-password'>
