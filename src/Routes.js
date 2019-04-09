@@ -11,6 +11,7 @@ import ChangePassword from './containers/User/ChangePassword';
 import InitialPasswordSetup from './containers/User/InitialPasswordSetup';
 import ContactUs from './containers/ContactUs';
 import NewRequest from './containers/Maintanance/NewRequest';
+import EditProfile from './containers/User/EditProfile'
 
 const Routes = ({ childProps }) => {
   return (
@@ -19,6 +20,7 @@ const Routes = ({ childProps }) => {
       <UnauthenticatedRoute path='/login' component={Login} props={childProps} />
       <AuthenticatedRoute exact path='/resident' component={ResidentUserInfo} props={childProps} />
       <AuthenticatedRoute path='/resident/change-password' component={ChangePassword} props={childProps} />
+      <AuthenticatedRoute path='/resident/edit-profile' component={EditProfile} props={childProps} />
       <AppliedRoute path='/resident/initial-password-setup' component={InitialPasswordSetup} props={childProps} />
       <AuthenticatedRoute path='/contactus' component={ContactUs} props={childProps} />
       <AuthenticatedRoute path='/maintanance' component={NewRequest} props={childProps} />

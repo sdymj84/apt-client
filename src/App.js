@@ -78,6 +78,19 @@ class App extends Component {
     })
   }
 
+  updateResident = async (uid) => {
+    let resident = null
+    if (uid) {
+      try {
+        resident = await API.get('apt', `/residents/${uid}`)
+      } catch (e) {
+        console.log(e, e.response)
+      }
+    }
+
+    this.setState({ resident })
+  }
+
   handleLogout = async () => {
     try {
       await Auth.signOut()
@@ -105,6 +118,7 @@ class App extends Component {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
+      updateResident: this.updateResident,
       resident: this.state.resident,
       apart: this.state.apart,
       theme: this.state.theme

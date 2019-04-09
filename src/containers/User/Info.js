@@ -5,26 +5,12 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 const StyledContainer = styled(Container)`
-  margin-top: 30px; 
-  /* span {
-    display: inline-block;
-    
-    :first-child {
-      width: 100%;
-      max-width: 300px;
-    }
-  }
-
-  @media (max-width: 576px) {
-    span {
-      display: block;
-    }
-  } */
+  margin-top: 30px;
+  max-width: 700px;
 
   .list-group-item:first-child {
     border-top: 2px solid #005916;
   }
-
   .btn-container {
     text-align: right;
   }
@@ -57,10 +43,11 @@ export class ResidentUserInfo extends Component {
       resident &&
       <StyledContainer>
         <div className="btn-container">
-          <Button
-            variant={`outline-${theme.buttonTheme}`}>
-            Edit Profile
-          </Button>
+          <Link to='/resident/edit-profile'>
+            <Button variant={`outline-${theme.buttonTheme}`}>
+              Edit Profile
+            </Button>
+          </Link>
           <Link to='/resident/change-password'>
             <Button variant={`outline-${theme.buttonTheme}`}>
               Change Password
