@@ -4,11 +4,10 @@
 3. Submit -> ConfirmModal (Submitted, another request?)
 */
 
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Container, Button, Form, Col, Row, Dropdown, OverlayTrigger, Popover } from "react-bootstrap";
+import { Container, Form, Col, Row, Dropdown, OverlayTrigger, Popover } from "react-bootstrap";
 import LoaderButton from '../../components/LoaderButton'
-import ConfirmModal from '../../components/ConfirmModal'
 import AlertModal from '../../components/AlertModal'
 import config from '../../config'
 import { FiAlertCircle } from 'react-icons/fi'
@@ -81,7 +80,7 @@ export class NewRequest extends Component {
 
   handleModalClose = () => {
     this.setState({ modalShow: false })
-    this.state.modalActive == 2
+    this.state.modalActive === 2
       && this.props.history.push('/')
   }
 

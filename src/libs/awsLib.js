@@ -3,7 +3,7 @@ import { Storage } from 'aws-amplify'
 export const s3Upload = async (file) => {
   try {
     const filename = `${Date.now()}-${file.name}`
-    const stored = await Storage.vault.put(filename, file, {
+    const stored = await Storage.put(filename, file, {
       contentType: file.type
     })
     return stored.key
@@ -14,7 +14,7 @@ export const s3Upload = async (file) => {
 
 export const s3Delete = async (filename) => {
   try {
-    await Storage.vault.remove(filename)
+    await Storage.remove(filename)
   } catch (e) {
     console.log(e, e.response)
   }
