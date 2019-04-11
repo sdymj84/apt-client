@@ -175,7 +175,6 @@ export class EditProfile extends Component {
     Render
   ===============================================================*/
   render() {
-    console.log(this.props)
     return (
       <StyledContainer>
         <Form onSubmit={this.handleSubmit}>
@@ -187,7 +186,7 @@ export class EditProfile extends Component {
               <Form.Control
                 disabled
                 onChange={this.handleChange}
-                value={this.state.firstName} />
+                value={this.state.firstName || ""} />
             </Form.Group>
 
             <Form.Group as={Col} md={6} controlId="lastName">
@@ -195,7 +194,7 @@ export class EditProfile extends Component {
               <Form.Control
                 disabled
                 onChange={this.handleChange}
-                value={this.state.lastName} />
+                value={this.state.lastName || ""} />
             </Form.Group>
           </Form.Row>
 
@@ -205,14 +204,14 @@ export class EditProfile extends Component {
               <Form.Control type="email" placeholder="email@savoy.com"
                 disabled
                 onChange={this.handleChange}
-                value={this.state.email} />
+                value={this.state.email || ""} />
             </Form.Group>
 
             <Form.Group as={Col} lg={6} controlId="phone">
               <Form.Label>Phone</Form.Label>
               <Form.Control placeholder="1112223333"
                 onChange={(e) => this.validateNumber(e) && this.handleChange(e)}
-                value={this.state.phone} />
+                value={this.state.phone || ""} />
             </Form.Group>
           </Form.Row>
 
@@ -242,21 +241,21 @@ export class EditProfile extends Component {
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 onChange={this.handleErChange}
-                value={this.state.erContact.firstName} />
+                value={this.state.erContact.firstName || ""} />
             </Form.Group>
 
             <Form.Group as={Col} md={4} controlId="lastName">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 onChange={this.handleErChange}
-                value={this.state.erContact.lastName} />
+                value={this.state.erContact.lastName || ""} />
             </Form.Group>
 
             <Form.Group as={Col} md={4} controlId="phone">
               <Form.Label>Phone</Form.Label>
               <Form.Control placeholder="1112223333"
                 onChange={(e) => this.validateNumber(e) && this.handleErChange(e)}
-                value={this.state.erContact.phone} />
+                value={this.state.erContact.phone || ""} />
             </Form.Group>
           </Form.Row>
 
@@ -270,21 +269,21 @@ export class EditProfile extends Component {
                   <Form.Label>Year</Form.Label>
                   <Form.Control placeholder="YYYY"
                     onChange={(e) => this.validateNumber(e) && this.handleVehiclesChange(e, i)}
-                    value={vehicle.year} />
+                    value={vehicle.year || ""} />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="make">
                   <Form.Label>Make</Form.Label>
                   <Form.Control placeholder="Honda"
                     onChange={(e) => this.handleVehiclesChange(e, i)}
-                    value={vehicle.make} />
+                    value={vehicle.make || ""} />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="model">
                   <Form.Label>Model</Form.Label>
                   <Form.Control placeholder="Accord"
                     onChange={(e) => this.handleVehiclesChange(e, i)}
-                    value={vehicle.model} />
+                    value={vehicle.model || ""} />
                 </Form.Group>
               </Form.Row>
 
@@ -293,21 +292,21 @@ export class EditProfile extends Component {
                   <Form.Label>Color</Form.Label>
                   <Form.Control
                     onChange={(e) => this.handleVehiclesChange(e, i)}
-                    value={vehicle.color} />
+                    value={vehicle.color || ""} />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="licensePlate">
                   <Form.Label>License Plate</Form.Label>
                   <Form.Control
                     onChange={(e) => this.handleVehiclesChange(e, i)}
-                    value={vehicle.licensePlate} />
+                    value={vehicle.licensePlate || ""} />
                 </Form.Group>
 
                 <Form.Group as={Col} md={4} controlId="state">
                   <Form.Label>State</Form.Label>
                   <Form.Control
                     onChange={(e) => this.handleVehiclesChange(e, i)}
-                    value={vehicle.state} />
+                    value={vehicle.state || ""} />
                 </Form.Group>
               </Form.Row>
             </Fragment>
