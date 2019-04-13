@@ -34,38 +34,6 @@ export class EditProfile extends Component {
   constructor(props) {
     super(props)
     this.state = this.props.resident
-    /* this.state = {
-      apt: "",
-      modalShow: false,
-      modalAlertShow: false,
-      modalMessage: "",
-      residentId: "",
-      apartId: "",
-      regiNum: "",
-      isExpanded: false,
-      isLoading: false,
-      firstName: "",
-      lastName: "",
-      phone: "",
-      erContact: {
-        firstName: "",
-        lastName: "",
-        phone: "",
-      },
-      vehicles: [{
-        year: "",
-        make: "",
-        model: "",
-        color: "",
-        licensePlate: "",
-        state: "",
-      }],
-      notifications: {
-        isVoiceCallSub: false,
-        isTextSub: false,
-        isEmailSub: false,
-      },
-    } */
   }
 
 
