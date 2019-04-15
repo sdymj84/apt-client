@@ -36,7 +36,6 @@ export class ResidentUserInfo extends Component {
   }
 
   render() {
-    console.log(this.props)
     const { apart, resident, theme } = this.props
 
     return (
@@ -102,19 +101,19 @@ export class ResidentUserInfo extends Component {
               <ListGroup.Item>
                 <Row>
                   <Col>Move In Date</Col>
-                  <Col>{moment(resident.moveInDate).format('L')}</Col>
+                  <Col>{moment(apart.moveInDate).format('L')}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Lease From Date</Col>
-                  <Col>{moment(resident.leaseStartDate).format('L')}</Col>
+                  <Col>{moment(apart.leaseStartDate).format('L')}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Lease To Date</Col>
-                  <Col>{moment(resident.leaseEndDate).format('L')}</Col>
+                  <Col>{moment(apart.leaseEndDate).format('L')}</Col>
                 </Row>
               </ListGroup.Item>
             </ListGroup>
