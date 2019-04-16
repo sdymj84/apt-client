@@ -30,6 +30,7 @@ const StyledContainer = styled(Container)`
 class App extends Component {
   constructor(props) {
     super(props)
+    this._isMounted = false
     this.state = {
       isAuthenticating: true,
       isAuthenticated: false,
@@ -41,6 +42,7 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
+    this._isMounted = true
     try {
       const currentUser = await Auth.currentAuthenticatedUser()
       await this.userHasAuthenticated(currentUser.username)
@@ -48,7 +50,11 @@ class App extends Component {
       console.log(e, e.response)
     }
 
-    this.setState({ isAuthenticating: false })
+    this._isMounted && this.setState({ isAuthenticating: false })
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false
   }
 
   userHasAuthenticated = async (uid) => {
