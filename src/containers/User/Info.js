@@ -116,6 +116,12 @@ export class ResidentUserInfo extends Component {
                   <Col>{moment(apart.leaseEndDate).format('L')}</Col>
                 </Row>
               </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Move Out Date</Col>
+                  <Col>{moment(apart.moveOutDate).format('L')}</Col>
+                </Row>
+              </ListGroup.Item>
             </ListGroup>
           </Card.Body>
         </StyledCard>
