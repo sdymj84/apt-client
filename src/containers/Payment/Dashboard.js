@@ -26,3 +26,36 @@
   - Add / Edit / Delete available for bank and card
 
 */
+
+import React, { Component } from 'react'
+import styled from 'styled-components'
+import { Container, Tabs, Tab } from 'react-bootstrap'
+import MakePayment from './MakePayment'
+
+
+const StyledContainer = styled(Container)`
+  margin-top: 3em;
+  max-width: 600px;
+`
+
+export class Dashboard extends Component {
+  render() {
+    return (
+      <StyledContainer>
+        <Tabs defaultActiveKey="makePayment">
+          <Tab eventKey="makePayment" title="Make Payment">
+            <MakePayment />
+          </Tab>
+          <Tab eventKey="profile" title="Profile">
+            <div>2</div>
+          </Tab>
+          <Tab eventKey="contact" title="Contact">
+            <div>3</div>
+          </Tab>
+        </Tabs>
+      </StyledContainer>
+    )
+  }
+}
+
+export default Dashboard

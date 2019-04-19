@@ -12,6 +12,7 @@ import InitialPasswordSetup from './containers/User/InitialPasswordSetup';
 import ContactUs from './containers/ContactUs';
 import NewRequest from './containers/Maintanance/NewRequest';
 import EditProfile from './containers/User/EditProfile'
+import Dashboard from './containers/Payment/Dashboard';
 
 const Routes = ({ childProps }) => {
   return (
@@ -24,6 +25,7 @@ const Routes = ({ childProps }) => {
       <AppliedRoute path='/resident/initial-password-setup' component={InitialPasswordSetup} props={childProps} />
       <AuthenticatedRoute path='/contactus' component={ContactUs} props={childProps} />
       <AuthenticatedRoute path='/maintanance' component={NewRequest} props={childProps} />
+      <AuthenticatedRoute path='/payment' component={Dashboard} props={childProps} />
       <Route component={NotFound} />
     </Switch>
   )
