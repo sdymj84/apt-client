@@ -31,11 +31,14 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Container, Tabs, Tab } from 'react-bootstrap'
 import MakePayment from './MakePayment'
+import PaymentAccounts from './PaymentAccounts';
+import AutopaySetup from './AutopaySetup';
+import RecentActivity from './RecentActivity';
 
 
 const StyledContainer = styled(Container)`
   margin-top: 3em;
-  max-width: 600px;
+  max-width: 800px;
 `
 
 export class Dashboard extends Component {
@@ -46,11 +49,14 @@ export class Dashboard extends Component {
           <Tab eventKey="makePayment" title="Make Payment">
             <MakePayment />
           </Tab>
-          <Tab eventKey="profile" title="Profile">
-            <div>2</div>
+          <Tab eventKey="autoPaySetup" title="Auto-pay Setup">
+            <AutopaySetup />
           </Tab>
-          <Tab eventKey="contact" title="Contact">
-            <div>3</div>
+          <Tab eventKey="recentActivity" title="Recent Activity">
+            <RecentActivity />
+          </Tab>
+          <Tab eventKey="paymentAccounts" title="Payment Accounts">
+            <PaymentAccounts />
           </Tab>
         </Tabs>
       </StyledContainer>
