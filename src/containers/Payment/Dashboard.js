@@ -25,6 +25,9 @@
   - Bank Accounts and Cards info
   - Add / Edit / Delete available for bank and card
 
+* Limitation of react-collapsing-table
+  - can't set className on specific table or row/column
+  - string currency cannot be sorted properly
 */
 
 import React, { Component } from 'react'

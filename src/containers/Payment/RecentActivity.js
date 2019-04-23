@@ -15,21 +15,37 @@ const StyledContainer = styled(Container)`
   button {
     margin-right: 5px;
   }
+  .react-collapsible-theme .react-collapsible td, .react-collapsible-theme .react-collapsible thead th {
+    min-width: 0;
+  }
 `
 
 const RecentActivity = () => {
   const recentActivity = {
     rows: [{
-      paymentAccount: 'Bank Account',
-      startDate: '05/01/2019',
-      endDate: '04/01/2020',
-      payOnDay: '2nd',
+      date: '3/3/2019',
+      paymentAndCharges: 'rent-March',
+      charges: '$926.00',
+      payments: '$0.00',
+      balance: '-$26.03'
+    }, {
+      date: '3/4/2019',
+      paymentAndCharges: 'water-water service',
+      charges: '$52.00',
+      payments: '$0.00',
+      balance: '-$78.03'
+    }, {
+      date: '3/5/2019',
+      paymentAndCharges: 'Payment',
+      charges: '$0.00',
+      payments: '$78.03',
+      balance: '$0.00'
     }],
     columns: [{
       accessor: 'date',
       label: 'Date',
       position: 1,
-      minWidth: 200,
+      minWidth: 100,
     }, {
       accessor: 'paymentAndCharges',
       label: 'Payments and Charges',

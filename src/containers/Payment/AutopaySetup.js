@@ -15,6 +15,9 @@ const StyledContainer = styled(Container)`
   button {
     margin-right: 5px;
   }
+  .paymentAccount {
+    width: 250px;
+  }
 `
 
 const AutopaySetup = () => {

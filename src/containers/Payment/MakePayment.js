@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Container } from 'react-bootstrap'
 import CollapsingTable from '../../components/CollapsingTable';
 import LoaderButton from '../../components/LoaderButton';
+import moment from 'moment'
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -19,18 +20,23 @@ const StyledContainer = styled(Container)`
 `
 
 const MakePayment = () => {
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+
   const balanceDetail = {
     rows: [{
       charge: 'Rent',
-      amount: '$925.00',
+      amount: formatter.format(Number(926)),
       chargedOn: '04/01/2019'
     }, {
       charge: 'Water',
-      amount: '$34.00',
+      amount: formatter.format(Number(34)),
       chargedOn: '04/01/2019'
     }, {
       charge: 'Internet',
-      amount: '$60.00',
+      amount: formatter.format(Number(29.95 * 2)),
       chargedOn: '04/01/2019'
     }],
     columns: [{
@@ -53,17 +59,33 @@ const MakePayment = () => {
 
   const monthDetail = {
     rows: [{
+      id: 1,
       charge: 'Rent',
-      amount: '$925.00',
+      amount: '$926.00',
     }, {
-      charge: 'Water',
-      amount: '$34.00',
-    }, {
-      charge: 'Internet',
-      amount: '$60.00',
-    }, {
-      charge: 'Late rent fee',
+      id: 2,
+      charge: 'Water/Sewer Utilities',
       amount: '$50.00',
+    }, {
+      id: 3,
+      charge: 'Internet',
+      amount: '$29.95.00',
+    }, {
+      id: 4,
+      charge: 'Cable TV Fees',
+      amount: '$29.95',
+    }, {
+      id: 5,
+      charge: 'Trash Fees',
+      amount: '$14.00',
+    }, {
+      id: 6,
+      charge: 'Insurance Noncompilance Fee',
+      amount: '$0.00',
+    }, {
+      id: 7,
+      charge: 'Total Amount',
+      amount: '$1,049.90',
     }],
     columns: [{
       accessor: 'charge',
@@ -94,7 +116,7 @@ const MakePayment = () => {
         text="Pay Now" />
 
       <div className="title">
-        <div>April Montly Charges</div>
+        <div>{moment().format('MMMM')} Montly Charges</div>
       </div>
       <CollapsingTable
         rows={monthDetail.rows}
