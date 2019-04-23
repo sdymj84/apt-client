@@ -19,26 +19,31 @@ const StyledContainer = styled(Container)`
   }
 `
 
-const MakePayment = () => {
+const MakePayment = ({ payments }) => {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
   })
+  let paymentsOnThisMonth = []
+  let monthRows = []
+  const d = new Date()
+  let total = 0
+
+  // Get index of payment which balance was 0 for the last
+  const lastIndexOfZeroBalance = payments.findIndex(payment =>
+    Number(payment.balance) === 0)
+
+  let balanceRows = []
+  for (let i = 0; i < lastIndexOfZeroBalance; i++) {
+    balanceRows.push({
+      charge: payments[i].title,
+      amount: formatter.format(payments[i].charge),
+      chargedOn: moment(Date(payments[i].transactedAt)).format('L'),
+    })
+  }
 
   const balanceDetail = {
-    rows: [{
-      charge: 'Rent',
-      amount: formatter.format(Number(926)),
-      chargedOn: '04/01/2019'
-    }, {
-      charge: 'Water',
-      amount: formatter.format(Number(34)),
-      chargedOn: '04/01/2019'
-    }, {
-      charge: 'Internet',
-      amount: formatter.format(Number(29.95 * 2)),
-      chargedOn: '04/01/2019'
-    }],
+    rows: balanceRows,
     columns: [{
       accessor: 'charge',
       label: 'Charge',
@@ -49,6 +54,7 @@ const MakePayment = () => {
       label: 'Amount',
       position: 2,
       minWidth: 150,
+      sortable: false,
     }, {
       accessor: 'chargedOn',
       label: 'Charged on',
@@ -57,54 +63,93 @@ const MakePayment = () => {
     }]
   }
 
+
+
+
+  // Filter payments by this month
+  paymentsOnThisMonth = payments.filter(payment =>
+    payment.transactedAt >= new Date(d.getFullYear(), d.getMonth(), 1))
+
+  // Show main charges for this month
+  // (rent, water, internet, cable, trash, insurance)
+  paymentsOnThisMonth.map(payment => {
+    const pre = payment.title.split('-')[0]
+    switch (pre) {
+      case 'rent':
+        monthRows.push({
+          charge: 'Rent',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      case 'water':
+        monthRows.push({
+          charge: 'Water/Sewer Utilities',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      case 'internet':
+        monthRows.push({
+          charge: 'Internet',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      case 'cable':
+        monthRows.push({
+          charge: 'Cable TV Fees',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      case 'trash':
+        monthRows.push({
+          charge: 'Trash Fees',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      case 'insurance':
+        monthRows.push({
+          charge: 'Insurance Noncomilance Fees',
+          amount: formatter.format(payment.charge)
+        })
+        total = total + Number(payment.charge)
+        break;
+      default:
+        break;
+    }
+  })
+
+  // Add total at the end of table
+  monthRows.push({
+    charge: 'Total Amount',
+    amount: formatter.format(total)
+  })
+
   const monthDetail = {
-    rows: [{
-      id: 1,
-      charge: 'Rent',
-      amount: '$926.00',
-    }, {
-      id: 2,
-      charge: 'Water/Sewer Utilities',
-      amount: '$50.00',
-    }, {
-      id: 3,
-      charge: 'Internet',
-      amount: '$29.95.00',
-    }, {
-      id: 4,
-      charge: 'Cable TV Fees',
-      amount: '$29.95',
-    }, {
-      id: 5,
-      charge: 'Trash Fees',
-      amount: '$14.00',
-    }, {
-      id: 6,
-      charge: 'Insurance Noncompilance Fee',
-      amount: '$0.00',
-    }, {
-      id: 7,
-      charge: 'Total Amount',
-      amount: '$1,049.90',
-    }],
+    rows: monthRows,
     columns: [{
       accessor: 'charge',
       label: 'Charge',
       position: 1,
       minWidth: 300,
+      sortable: false,
     }, {
       accessor: 'amount',
       label: 'Amount',
       position: 2,
       minWidth: 150,
+      sortable: false,
     }]
   }
 
   return (
     <StyledContainer>
       <div className="title">
-        <div>Current Balance : $0.00</div>
-        <div>As of : 4/19/2019</div>
+        <div>Current Balance : {formatter.format(payments[0].balance)}</div>
+        <div>As of : {moment().format('L')}</div>
       </div>
       <CollapsingTable
         rows={balanceDetail.rows}

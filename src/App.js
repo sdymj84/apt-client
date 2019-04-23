@@ -36,6 +36,7 @@ class App extends Component {
       isAuthenticated: false,
       resident: null,
       apart: null,
+      payments: null,
       isAnnouncementConfirmed: false,
       theme: Theme.Basic
     }
@@ -60,11 +61,14 @@ class App extends Component {
   userHasAuthenticated = async (uid) => {
     let resident = null
     let apart = null
+    let payments = null
     let isAnnouncementConfirmed = false
     if (uid) {
       try {
         resident = await API.get('apt', `/residents/${uid}`)
         apart = await API.get('apt', `/aparts/${resident.apartId}`)
+        payments = await API.get('apt', `/payments/${resident.apartId}`)
+        payments = payments.Items
       } catch (e) {
         console.log(e, e.response)
       }
@@ -80,6 +84,7 @@ class App extends Component {
       isAuthenticated: uid ? true : false,
       resident,
       apart,
+      payments,
       isAnnouncementConfirmed
     })
   }
@@ -121,12 +126,14 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state)
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       updateResident: this.updateResident,
       resident: this.state.resident,
       apart: this.state.apart,
+      payments: this.state.payments,
       theme: this.state.theme
     }
     return (

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Container } from 'react-bootstrap'
 import CollapsingTable from '../../components/CollapsingTable';
+import moment from 'moment'
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -20,27 +21,24 @@ const StyledContainer = styled(Container)`
   }
 `
 
-const RecentActivity = () => {
+const RecentActivity = ({ payments }) => {
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+
+  let rows = []
+  payments.map(payment => {
+    rows.push({
+      date: moment(Date(payment.transactedAt)).format('L'),
+      paymentAndCharges: payment.title,
+      charges: formatter.format(payment.charge),
+      payments: formatter.format(payment.payment),
+      balance: formatter.format(payment.balance),
+    })
+  })
   const recentActivity = {
-    rows: [{
-      date: '3/3/2019',
-      paymentAndCharges: 'rent-March',
-      charges: '$926.00',
-      payments: '$0.00',
-      balance: '-$26.03'
-    }, {
-      date: '3/4/2019',
-      paymentAndCharges: 'water-water service',
-      charges: '$52.00',
-      payments: '$0.00',
-      balance: '-$78.03'
-    }, {
-      date: '3/5/2019',
-      paymentAndCharges: 'Payment',
-      charges: '$0.00',
-      payments: '$78.03',
-      balance: '$0.00'
-    }],
+    rows,
     columns: [{
       accessor: 'date',
       label: 'Date',
