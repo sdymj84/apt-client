@@ -28,7 +28,7 @@ const RecentActivity = ({ payments }) => {
   })
 
   let rows = []
-  payments.map(payment => {
+  payments.forEach(payment => {
     rows.push({
       date: moment(Date(payment.transactedAt)).format('L'),
       paymentAndCharges: payment.title,

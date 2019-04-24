@@ -19,7 +19,6 @@ const GlobalStyle = createGlobalStyle`
 
 const StyledContainer = styled(Container)`
   margin-top: 15px;
-
   .navbar-brand a {
     color: ${props => props.theme.brandColor};
     text-decoration: none;

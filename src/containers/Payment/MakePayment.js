@@ -72,7 +72,7 @@ const MakePayment = ({ payments }) => {
 
   // Show main charges for this month
   // (rent, water, internet, cable, trash, insurance)
-  paymentsOnThisMonth.map(payment => {
+  paymentsOnThisMonth.forEach(payment => {
     const pre = payment.title.split('-')[0]
     switch (pre) {
       case 'rent':

@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Container, Button } from 'react-bootstrap'
 import CollapsingTable from '../../components/CollapsingTable';
+import creditCardType from 'credit-card-type'
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -17,16 +18,17 @@ const StyledContainer = styled(Container)`
   }
 `
 
-const PaymentAccounts = () => {
-  const bankAccounts = {
-    rows: [{
-      name: 'Minjun Youn',
-      routingNum: '081000032',
-      accountNum: '*****5362',
-      accountType: 'Checking',
-      edit: 'Edit',
-      delete: 'Delete',
-    }],
+
+export class PaymentAccounts extends Component {
+
+  accounts = resident.bankAccount
+  cards = resident.card
+  bankRows = []
+  cardRows = []
+
+
+  bankAccountsTable = {
+    rows: bankRows,
     columns: [{
       accessor: 'name',
       label: 'Name on Account',
@@ -60,13 +62,8 @@ const PaymentAccounts = () => {
     }]
   }
 
-  const cards = {
-    rows: [{
-      cardType: 'Visa (Credit Card)',
-      cardNum: 'XXXX-1209',
-      edit: 'Edit',
-      delete: 'Delete',
-    }],
+  cardsTable = {
+    rows: cardRows,
     columns: [{
       accessor: 'cardType',
       label: 'Card Type',
@@ -90,33 +87,58 @@ const PaymentAccounts = () => {
     }]
   }
 
-  return (
-    <StyledContainer>
-      <div className="title">
-        Bank Accounts
-        <Button variant="outline-success">Add Bank Account</Button>
-      </div>
-      <p>Use the bank accounts listed below to make one-time payments
-        or schedule monthly automatic payments.</p>
-      <CollapsingTable
-        rows={bankAccounts.rows}
-        columns={bankAccounts.columns}
-      />
-      <div className="title">
-        <div>Credit Cards or Debit Cards</div>
-        <div>
-          <Button variant="outline-success">Add Credit Card</Button>
-          <Button variant="outline-success">Add Debig Card  </Button>
+  render() {
+    const { resident } = this.props
+    accounts.forEach(account => {
+      bankRows.push({
+        ...account,
+        accountNum: `*****${account.accountNum.slice(-4)}`,
+        edit: 'Edit',
+        delete: 'Delete'
+      })
+    })
+
+    cards.forEach(card => {
+      cardRows.push({
+        cardType: creditCardType(card.number)[0].niceType,
+        cardNum: `XXXX-${card.number.slice(-4)}`,
+        edit: 'Edit',
+        delete: 'Delete',
+      })
+    })
+
+    return (
+      <StyledContainer>
+        <div className="title">
+          Bank Accounts
+        <Button
+            variant="outline-success"
+            onClick={this.modalBankShow}>
+            Add Bank Account
+        </Button>
         </div>
-      </div>
-      <p>Use the credit cards or debit cards listed below to make
+        <p>Use the bank accounts listed below to make one-time payments
+        or schedule monthly automatic payments.</p>
+        <CollapsingTable
+          rows={bankAccountsTable.rows}
+          columns={bankAccountsTable.columns}
+        />
+        <div className="title">
+          <div>Credit Cards or Debit Cards</div>
+          <div>
+            <Button variant="outline-success">Add Credit Card</Button>
+            <Button variant="outline-success">Add Debit Card  </Button>
+          </div>
+        </div>
+        <p>Use the credit cards or debit cards listed below to make
           one-time payments or schedule monthly automatic payments.</p>
-      <CollapsingTable
-        rows={cards.rows}
-        columns={cards.columns}
-      />
-    </StyledContainer>
-  )
+        <CollapsingTable
+          rows={cardsTable.rows}
+          columns={cardsTable.columns}
+        />
+      </StyledContainer>
+    )
+  }
 }
 
 export default PaymentAccounts
