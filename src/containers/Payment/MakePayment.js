@@ -148,7 +148,10 @@ const MakePayment = ({ payments }) => {
   return (
     <StyledContainer>
       <div className="title">
-        <div>Current Balance : {formatter.format(payments[0].balance)}</div>
+        <div>Current Balance : {payments.length 
+          ? formatter.format(payments[0].balance)
+          : formatter.format(0)}
+        </div>
         <div>As of : {moment().format('L')}</div>
       </div>
       <CollapsingTable

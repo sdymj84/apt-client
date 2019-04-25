@@ -34,7 +34,9 @@ export class Dashboard extends Component {
             <RecentActivity payments={this.props.payments} />
           </Tab>
           <Tab eventKey="paymentAccounts" title="Payment Accounts">
-            <PaymentAccounts resident={this.props.resident} />
+            <PaymentAccounts
+              resident={this.props.resident}
+              updateResident={this.props.updateResident} />
           </Tab>
         </Tabs>
       </StyledContainer>

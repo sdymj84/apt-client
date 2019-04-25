@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Container, Button } from 'react-bootstrap'
 import CollapsingTable from '../../components/CollapsingTable';
 import creditCardType from 'credit-card-type'
+import AddBankAccount from './AddBankAccount';
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -20,76 +21,35 @@ const StyledContainer = styled(Container)`
 
 
 export class PaymentAccounts extends Component {
-
-  accounts = resident.bankAccount
-  cards = resident.card
-  bankRows = []
-  cardRows = []
-
-
-  bankAccountsTable = {
-    rows: bankRows,
-    columns: [{
-      accessor: 'name',
-      label: 'Name on Account',
-      position: 1,
-      minWidth: 200,
-    }, {
-      accessor: 'routingNum',
-      label: 'Routing No.',
-      position: 2,
-      minWidth: 200,
-    }, {
-      accessor: 'accountNum',
-      label: 'Account No.',
-      position: 3,
-      minWidth: 200,
-    }, {
-      accessor: 'accountType',
-      label: 'Account Type',
-      position: 4,
-      minWidth: 200,
-    }, {
-      accessor: 'edit',
-      label: 'Edit',
-      position: 5,
-      minWidth: 3000,
-    }, {
-      accessor: 'delete',
-      label: 'Delete',
-      position: 6,
-      minWidth: 3000,
-    }]
+  state = {
+    modalBankShow: false,
+    modalCardShow: false,
   }
 
-  cardsTable = {
-    rows: cardRows,
-    columns: [{
-      accessor: 'cardType',
-      label: 'Card Type',
-      position: 1,
-      minWidth: 200,
-    }, {
-      accessor: 'cardNum',
-      label: 'Card Number',
-      position: 2,
-      minWidth: 100,
-    }, {
-      accessor: 'edit',
-      label: 'Edit',
-      position: 5,
-      minWidth: 3000,
-    }, {
-      accessor: 'delete',
-      label: 'Delete',
-      position: 6,
-      minWidth: 3000,
-    }]
+  handleBankModalShow = () => {
+    this.setState({ modalBankShow: true })
   }
+  handleBankModalClose = () => {
+    this.setState({ modalBankShow: false })
+  }
+
+  handleCardModalShow = () => {
+    this.setState({ modalCardShow: true })
+  }
+  handleCardModalClose = () => {
+    this.setState({ modalCardShow: false })
+  }
+
 
   render() {
     const { resident } = this.props
-    accounts.forEach(account => {
+
+    const accounts = resident.bankAccount
+    const cards = resident.card
+    const bankRows = []
+    const cardRows = []
+
+    accounts && accounts.length && accounts.forEach(account => {
       bankRows.push({
         ...account,
         accountNum: `*****${account.accountNum.slice(-4)}`,
@@ -98,7 +58,7 @@ export class PaymentAccounts extends Component {
       })
     })
 
-    cards.forEach(card => {
+    cards && cards.length && cards.forEach(card => {
       cardRows.push({
         cardType: creditCardType(card.number)[0].niceType,
         cardNum: `XXXX-${card.number.slice(-4)}`,
@@ -107,13 +67,73 @@ export class PaymentAccounts extends Component {
       })
     })
 
+    const bankAccountsTable = {
+      rows: bankRows,
+      columns: [{
+        accessor: 'name',
+        label: 'Name on Account',
+        position: 1,
+        minWidth: 200,
+      }, {
+        accessor: 'routingNum',
+        label: 'Routing No.',
+        position: 2,
+        minWidth: 200,
+      }, {
+        accessor: 'accountNum',
+        label: 'Account No.',
+        position: 3,
+        minWidth: 200,
+      }, {
+        accessor: 'accountType',
+        label: 'Account Type',
+        position: 4,
+        minWidth: 200,
+      }, {
+        accessor: 'edit',
+        label: 'Edit',
+        position: 5,
+        minWidth: 3000,
+      }, {
+        accessor: 'delete',
+        label: 'Delete',
+        position: 6,
+        minWidth: 3000,
+      }]
+    }
+
+    const cardsTable = {
+      rows: cardRows,
+      columns: [{
+        accessor: 'cardType',
+        label: 'Card Type',
+        position: 1,
+        minWidth: 200,
+      }, {
+        accessor: 'cardNum',
+        label: 'Card Number',
+        position: 2,
+        minWidth: 100,
+      }, {
+        accessor: 'edit',
+        label: 'Edit',
+        position: 5,
+        minWidth: 3000,
+      }, {
+        accessor: 'delete',
+        label: 'Delete',
+        position: 6,
+        minWidth: 3000,
+      }]
+    }
+
     return (
       <StyledContainer>
         <div className="title">
           Bank Accounts
         <Button
             variant="outline-success"
-            onClick={this.modalBankShow}>
+            onClick={this.handleBankModalShow}>
             Add Bank Account
         </Button>
         </div>
@@ -136,6 +156,12 @@ export class PaymentAccounts extends Component {
           rows={cardsTable.rows}
           columns={cardsTable.columns}
         />
+
+        <AddBankAccount
+          modalShow={this.state.modalBankShow}
+          handleModalClose={this.handleBankModalClose}
+          updateResident={this.props.updateResident}
+          resident={resident} />
       </StyledContainer>
     )
   }
