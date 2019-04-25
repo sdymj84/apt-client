@@ -4,6 +4,7 @@ import { Container, Button } from 'react-bootstrap'
 import CollapsingTable from '../../components/CollapsingTable';
 import creditCardType from 'credit-card-type'
 import AddBankAccount from './AddBankAccount';
+import AddCard from './AddCard'
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -146,8 +147,14 @@ export class PaymentAccounts extends Component {
         <div className="title">
           <div>Credit Cards or Debit Cards</div>
           <div>
-            <Button variant="outline-success">Add Credit Card</Button>
-            <Button variant="outline-success">Add Debit Card  </Button>
+            <Button
+              variant="outline-success"
+              onClick={this.handleCardModalShow}>
+              Add Credit Card</Button>
+            <Button
+              variant="outline-success"
+              onClick={this.handleCardModalShow}>
+              Add Debit Card</Button>
           </div>
         </div>
         <p>Use the credit cards or debit cards listed below to make
@@ -160,6 +167,11 @@ export class PaymentAccounts extends Component {
         <AddBankAccount
           modalShow={this.state.modalBankShow}
           handleModalClose={this.handleBankModalClose}
+          updateResident={this.props.updateResident}
+          resident={resident} />
+        <AddCard
+          modalShow={this.state.modalCardShow}
+          handleModalClose={this.handleCardModalClose}
           updateResident={this.props.updateResident}
           resident={resident} />
       </StyledContainer>

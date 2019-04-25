@@ -1,28 +1,28 @@
 // DEV Config
 
-/* export default {
+export default {
   MAX_ATTACHMENT_SIZE: 5000000,
   s3: {
     REGION: "us-east-2",
-    BUCKET: "apt-api-dev-attachmentsbucket-15cyis9p1flj3"
+    BUCKET: "apt-api-dev-attachmentsbucket-11ysd3am6wave"
   },
   apiGateway: {
     REGION: "us-east-2",
-    URL: "https://bk6hzyclvf.execute-api.us-east-2.amazonaws.com/dev"
+    URL: "https://6en81fg4h9.execute-api.us-east-2.amazonaws.com/dev"
   },
   cognito: {
     REGION: "us-east-2",
-    USER_POOL_ID: "us-east-2_k439IOM0A",
-    APP_CLIENT_ID: "4kfhfpbcinbr1ctc12brgf1lgj",
-    IDENTITY_POOL_ID: "us-east-2:a7a6eca1-28d2-4e0e-a1dd-abed9cb2d402"
+    USER_POOL_ID: "us-east-2_UcFdGv0rm",
+    APP_CLIENT_ID: "74ufhb658q602501n8srm2v5qe",
+    IDENTITY_POOL_ID: "us-east-2:03f204f8-1f4d-461a-857d-88e110ffbe7c"
   }
-}; */
+};
 
 
 
 // PROD Config
 
-export default {
+/* export default {
   MAX_ATTACHMENT_SIZE: 5000000,
   s3: {
     REGION: "us-east-2",
@@ -38,4 +38,4 @@ export default {
     APP_CLIENT_ID: "63k43t2e3dd1fklgel21ia2epr",
     IDENTITY_POOL_ID: "us-east-2:582d606b-c983-4b55-a574-4cee498fa0cf"
   }
-};
+}; */

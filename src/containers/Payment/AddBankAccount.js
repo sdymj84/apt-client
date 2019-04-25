@@ -69,8 +69,10 @@ export class AddBankAccount extends Component {
       const rid = this.props.resident.residentId
       const { name, routingNum, accountNum, accountType } = this.state
       const prevBankAccount = this.props.resident.bankAccount
-      const bankAccount = [...prevBankAccount, {name, routingNum, accountNum, accountType}]
-      
+      const bankAccount = !prevBankAccount || prevBankAccount.length > 0
+        ? [{ name, routingNum, accountNum, accountType }]
+        : [...prevBankAccount, { name, routingNum, accountNum, accountType }]
+
       await API.put('apt', `/residents/updateBankAccount/${rid}`, {
         body: {
           bankAccount
