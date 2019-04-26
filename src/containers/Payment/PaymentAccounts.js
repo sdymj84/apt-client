@@ -5,6 +5,8 @@ import CollapsingTable from '../../components/CollapsingTable';
 import creditCardType from 'credit-card-type'
 import AddBankAccount from './AddBankAccount';
 import AddCard from './AddCard'
+import DeleteButton from '../../components/DeleteButton'
+import { API } from 'aws-amplify'
 
 const StyledContainer = styled(Container)`
   padding: 0;
@@ -41,8 +43,50 @@ export class PaymentAccounts extends Component {
     this.setState({ modalCardShow: false })
   }
 
+  handleBankDelete = async (index) => {
+    const rid = this.props.resident.residentId
+    const prevBankAccount = this.props.resident.bankAccount
+    const bankAccount = prevBankAccount.filter((account, i) =>
+      i !== index)
+
+    try {
+      await API.put('apt',
+        `/residents/updateBankAccount/${rid}`, {
+          body: { bankAccount }
+        })
+      this.props.updateResident(rid)
+    } catch (e) {
+      console.log(e, e.response)
+    }
+  }
+
+  handleCardDelete = async (index) => {
+    const rid = this.props.resident.residentId
+    const prevCard = this.props.resident.card
+    const card = prevCard.filter((card, i) =>
+      i !== index)
+
+    try {
+      await API.put('apt',
+        `/residents/updateCard/${rid}`, {
+          body: { card }
+        })
+      this.props.updateResident(rid)
+    } catch (e) {
+      console.log(e, e.response)
+    }
+  }
 
   render() {
+    return (
+      this.props.resident
+        ? this.renderPage()
+        : null
+    )
+  }
+
+  renderPage() {
+    console.log(this.state)
     const { resident } = this.props
 
     const accounts = resident.bankAccount
@@ -50,20 +94,20 @@ export class PaymentAccounts extends Component {
     const bankRows = []
     const cardRows = []
 
-    accounts && accounts.length && accounts.forEach(account => {
+    accounts && accounts.length && accounts.forEach((account, i) => {
       bankRows.push({
         ...account,
         accountNum: `*****${account.accountNum.slice(-4)}`,
-        edit: 'Edit',
+        index: i,
         delete: 'Delete'
       })
     })
 
-    cards && cards.length && cards.forEach(card => {
+    cards && cards.length && cards.forEach((card, i) => {
       cardRows.push({
         cardType: creditCardType(card.number)[0].niceType,
         cardNum: `XXXX-${card.number.slice(-4)}`,
-        edit: 'Edit',
+        index: i,
         delete: 'Delete',
       })
     })
@@ -91,15 +135,11 @@ export class PaymentAccounts extends Component {
         position: 4,
         minWidth: 200,
       }, {
-        accessor: 'edit',
-        label: 'Edit',
-        position: 5,
-        minWidth: 3000,
-      }, {
-        accessor: 'delete',
+        accessor: 'bankDelete',
         label: 'Delete',
         position: 6,
         minWidth: 3000,
+        CustomComponent: DeleteButton,
       }]
     }
 
@@ -116,16 +156,17 @@ export class PaymentAccounts extends Component {
         position: 2,
         minWidth: 100,
       }, {
-        accessor: 'edit',
-        label: 'Edit',
-        position: 5,
-        minWidth: 3000,
-      }, {
-        accessor: 'delete',
+        accessor: 'cardDelete',
         label: 'Delete',
         position: 6,
         minWidth: 3000,
+        CustomComponent: DeleteButton,
       }]
+    }
+
+    const tableCallbacks = {
+      bankDelete: this.handleBankDelete,
+      cardDelete: this.handleCardDelete
     }
 
     return (
@@ -143,6 +184,7 @@ export class PaymentAccounts extends Component {
         <CollapsingTable
           rows={bankAccountsTable.rows}
           columns={bankAccountsTable.columns}
+          callbacks={tableCallbacks}
         />
         <div className="title">
           <div>Credit Cards or Debit Cards</div>
@@ -150,11 +192,7 @@ export class PaymentAccounts extends Component {
             <Button
               variant="outline-success"
               onClick={this.handleCardModalShow}>
-              Add Credit Card</Button>
-            <Button
-              variant="outline-success"
-              onClick={this.handleCardModalShow}>
-              Add Debit Card</Button>
+              Add Card</Button>
           </div>
         </div>
         <p>Use the credit cards or debit cards listed below to make
@@ -162,6 +200,7 @@ export class PaymentAccounts extends Component {
         <CollapsingTable
           rows={cardsTable.rows}
           columns={cardsTable.columns}
+          callbacks={tableCallbacks}
         />
 
         <AddBankAccount

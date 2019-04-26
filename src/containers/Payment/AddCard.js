@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Modal, Button, Form, Row, Col, Alert } from 'react-bootstrap'
+import { Modal, Button, Form, Row, Col, Alert, OverlayTrigger, Popover } from 'react-bootstrap'
 import styled from 'styled-components'
 import LoaderButton from '../../components/LoaderButton';
 import { API } from 'aws-amplify'
 import creditCardType from 'credit-card-type'
+import { FiAlertCircle } from 'react-icons/fi'
 
 
 const StyledModal = styled(Modal)`
@@ -23,6 +24,14 @@ const StyledModal = styled(Modal)`
     position: relative;
     top: 7px;
     font-size: 2em;
+  }
+
+ .alert-tooltip {
+    color: green;
+    cursor: pointer;
+    margin: 0 5px;
+    position: relative;
+    top: 3px;
   }
 `
 
@@ -46,6 +55,21 @@ export class AddCard extends Component {
     return e.target.value.match(/^[0-9]+$|^$/)
   }
 
+  handleModalClose = () => {
+    this.setState({
+      name: "",
+      number: "",
+      month: "",
+      year: "",
+      cardType: "",
+      cvc: "",
+      isAlert: false,
+      alertMessage: "",
+      isLoading: false,
+    })
+    this.props.handleModalClose()
+  }
+
   handleChange = (e) => {
     const id = e.target.id
     let cardType = ""
@@ -61,52 +85,44 @@ export class AddCard extends Component {
     })
   }
 
-  handleSelect = (key, e) => {
-    e.persist()
-    this.setState({
-      [key]: e.target.text
-    })
-  }
-
   handleSubmit = async (e) => {
     e.preventDefault()
-
-    if (this.state.accountNum !== this.state.accountNumConfirm) {
-      this.setState({
-        isAlert: true,
-        alertMessage: "Confirmation doesn't match Account Number."
-      })
-      return
-    }
 
     this.setState({ isLoading: true })
 
     try {
       const rid = this.props.resident.residentId
-      const { name, routingNum, accountNum, accountType } = this.state
-      const prevBankAccount = this.props.resident.bankAccount
-      const bankAccount = !prevBankAccount || prevBankAccount.length > 0
-        ? [{ name, routingNum, accountNum, accountType }]
-        : [...prevBankAccount, { name, routingNum, accountNum, accountType }]
+      const cardInfo = {
+        name: this.state.name,
+        number: this.state.number,
+        month: this.state.month,
+        year: this.state.year,
+        cardType: this.state.cardType,
+        cvc: this.state.cvc,
+      }
+      const prevCard = this.props.resident.card
+      const card = !prevCard || prevCard.length === 0
+        ? [cardInfo]
+        : [...prevCard, cardInfo]
 
-      await API.put('apt', `/residents/updateBankAccount/${rid}`, {
+      await API.put('apt', `/residents/updateCard/${rid}`, {
         body: {
-          bankAccount
+          card
         }
       })
       this.props.updateResident(rid)
-      this.props.handleModalClose()
+      this.handleModalClose()
     } catch (e) {
       console.log(e, e.response)
-      this.setState({ isLoading: false })
     }
+    this.setState({ isLoading: false })
   }
 
   render() {
     return (
       <StyledModal
         show={this.props.modalShow}
-        onHide={this.props.handleModalClose}>
+        onHide={this.handleModalClose}>
         <Form onSubmit={this.handleSubmit}>
           <Modal.Body>
             <Row>
@@ -173,7 +189,15 @@ export class AddCard extends Component {
               </Col>
               <Col xs={6}>
                 <Form.Group controlId="cvc">
-                  <Form.Label>CVC</Form.Label>
+                  <Form.Label>CVC
+                    <OverlayTrigger trigger="hover" placement="right" overlay={(
+                      <Popover id="popover-basic">
+                        {`CVC is the number on the back of your card.`}
+                      </Popover>
+                    )}>
+                      <FiAlertCircle className="alert-tooltip" />
+                    </OverlayTrigger>
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     required
@@ -192,7 +216,7 @@ export class AddCard extends Component {
           <Modal.Footer>
             <Button
               variant="outline-secondary"
-              onClick={this.props.handleModalClose}>Cancel</Button>
+              onClick={this.handleModalClose}>Cancel</Button>
             <LoaderButton
               type="submit"
               variant="outline-success"

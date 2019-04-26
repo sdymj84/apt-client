@@ -33,21 +33,25 @@ const AutopaySetup = () => {
       label: 'Payment Account',
       position: 1,
       minWidth: 200,
+      sortable: false,
     }, {
       accessor: 'startDate',
       label: 'Start Date',
       position: 2,
       minWidth: 200,
+      sortable: false,
     }, {
       accessor: 'endDate',
       label: 'End Date',
       position: 3,
       minWidth: 200,
+      sortable: false,
     }, {
       accessor: 'payOnDay',
       label: 'Pay on Day',
       position: 4,
       minWidth: 200,
+      sortable: false,
     }]
   }
 

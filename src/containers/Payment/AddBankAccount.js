@@ -52,6 +52,20 @@ export class AddBankAccount extends Component {
     })
   }
 
+  handleModalClose = () => {
+    this.setState({
+      name: "",
+      routingNum: "",
+      accountNum: "",
+      accountNumConfirm: "",
+      accountType: "",
+      isAlert: false,
+      alertMessage: "",
+      isLoading: false,
+    })
+    this.props.handleModalClose()
+  }
+
   handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -69,7 +83,7 @@ export class AddBankAccount extends Component {
       const rid = this.props.resident.residentId
       const { name, routingNum, accountNum, accountType } = this.state
       const prevBankAccount = this.props.resident.bankAccount
-      const bankAccount = !prevBankAccount || prevBankAccount.length > 0
+      const bankAccount = !prevBankAccount || prevBankAccount.length === 0
         ? [{ name, routingNum, accountNum, accountType }]
         : [...prevBankAccount, { name, routingNum, accountNum, accountType }]
 
@@ -79,18 +93,18 @@ export class AddBankAccount extends Component {
         }
       })
       this.props.updateResident(rid)
-      this.props.handleModalClose()
+      this.handleModalClose()
     } catch (e) {
       console.log(e, e.response)
-      this.setState({ isLoading: false })
     }
+    this.setState({ isLoading: false })
   }
 
   render() {
     return (
       <StyledModal
         show={this.props.modalShow}
-        onHide={this.props.handleModalClose}>
+        onHide={this.handleModalClose}>
         <Form onSubmit={this.handleSubmit}>
           <Modal.Body>
             <Form.Group controlId="name">
@@ -156,7 +170,7 @@ export class AddBankAccount extends Component {
           <Modal.Footer>
             <Button
               variant="outline-secondary"
-              onClick={this.props.handleModalClose}>Cancel</Button>
+              onClick={this.handleModalClose}>Cancel</Button>
             <LoaderButton
               type="submit"
               variant="outline-success"
