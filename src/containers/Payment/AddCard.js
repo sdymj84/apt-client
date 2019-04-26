@@ -75,7 +75,10 @@ export class AddCard extends Component {
     let cardType = ""
 
     if (id === "number") {
-      cardType = creditCardType(e.target.value)[0].niceType
+      const type = creditCardType(e.target.value)
+      cardType = e.target.value 
+        ? type.length ? type[0].niceType : "Invalid"
+        : ""
     }
 
     this.setState({
