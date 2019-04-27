@@ -28,7 +28,9 @@ export class Dashboard extends Component {
             <MakePayment payments={this.props.payments} />
           </Tab>
           <Tab eventKey="autoPaySetup" title="Auto-pay Setup">
-            <AutopaySetup />
+            <AutopaySetup
+              resident={this.props.resident}
+              updateResident={this.props.updateResident} />
           </Tab>
           <Tab eventKey="recentActivity" title="Recent Activity">
             <RecentActivity payments={this.props.payments} />

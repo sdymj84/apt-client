@@ -9,7 +9,6 @@ const StyledLoaderButton = styled(LoaderButtonNoDiv)`
 `
 
 const DeleteButton = ({ row, accessor, CustomFunction }) => {
-  console.log(row, accessor, CustomFunction)
   const handleDelete = () => {
     CustomFunction(row.index)
   }

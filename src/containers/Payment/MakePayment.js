@@ -63,9 +63,6 @@ const MakePayment = ({ payments }) => {
     }]
   }
 
-
-
-
   // Filter payments by this month
   paymentsOnThisMonth = payments.filter(payment =>
     payment.transactedAt >= new Date(d.getFullYear(), d.getMonth(), 1))

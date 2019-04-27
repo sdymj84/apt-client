@@ -21,7 +21,7 @@ const StyledContainer = styled.div`
 const LoaderButton = ({ isLoading, text, loadingText,
   disabled, ...rest }) => {
   return (
-    <StyledContainer margin={rest.margin}>
+    <StyledContainer margin={rest.margin} className="loader-btn-container">
       <Button
         {...rest}
         className="LoaderButton"

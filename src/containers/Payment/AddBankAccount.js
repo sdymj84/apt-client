@@ -159,10 +159,6 @@ export class AddBankAccount extends Component {
                   <Dropdown.Item eventKey="accountType">Savings Account</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              {/* <Form.Control
-                type="text"
-                onChange={this.handleChange}
-                value={this.state.name} /> */}
             </Form.Group>
             {this.state.isAlert &&
               <Alert variant="danger">{this.state.alertMessage}</Alert>}

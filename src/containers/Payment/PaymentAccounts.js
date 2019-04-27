@@ -24,9 +24,18 @@ const StyledContainer = styled(Container)`
 
 
 export class PaymentAccounts extends Component {
+  _isMounted = false
   state = {
     modalBankShow: false,
     modalCardShow: false,
+  }
+
+  componentDidMount() {
+    this._isMounted = true
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
   }
 
   handleBankModalShow = () => {
@@ -86,7 +95,6 @@ export class PaymentAccounts extends Component {
   }
 
   renderPage() {
-    console.log(this.state)
     const { resident } = this.props
 
     const accounts = resident.bankAccount
@@ -197,11 +205,13 @@ export class PaymentAccounts extends Component {
         </div>
         <p>Use the credit cards or debit cards listed below to make
           one-time payments or schedule monthly automatic payments.</p>
-        <CollapsingTable
-          rows={cardsTable.rows}
-          columns={cardsTable.columns}
-          callbacks={tableCallbacks}
-        />
+
+        {this._isMounted &&
+          <CollapsingTable
+            rows={cardsTable.rows}
+            columns={cardsTable.columns}
+            callbacks={tableCallbacks}
+          />}
 
         <AddBankAccount
           modalShow={this.state.modalBankShow}
