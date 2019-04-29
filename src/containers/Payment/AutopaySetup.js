@@ -34,7 +34,7 @@ export class AutopaySetup extends Component {
     this.state = {
       modalShow: false,
       paymentMethodList: [],
-      autoPayMethod: "",
+      autopayMethod: "",
       autopayMethodText: 'Select Account',
       isLoading: false,
     }
@@ -84,14 +84,14 @@ export class AutopaySetup extends Component {
     // save selected account text for dropdown title
 
     const { bankAccount, card } = this.props.resident
-    const autoPayMethod = (e.target.id < bankAccount.length)
+    const autopayMethod = (e.target.id < bankAccount.length)
       // if selected method is bank account,
       ? bankAccount[e.target.id]
       // if selected method is card
       : card[e.target.id - bankAccount.length]
 
     this.setState({
-      autoPayMethod,
+      autopayMethod,
       autopayMethodText: this.state.paymentMethodList[e.target.id],
       modalShow: true
     })
@@ -99,11 +99,11 @@ export class AutopaySetup extends Component {
 
   handleSubmit = async ({ startDate, endDate, payOnDay }, e) => {
     e.preventDefault()
-    console.log(this.state.autoPayMethod, startDate, endDate, payOnDay)
+    console.log(this.state.autopayMethod, startDate, endDate, payOnDay)
     const rid = this.props.resident.residentId
     const autopay = {
-      autoPayMethod: this.state.autoPayMethod,
-      autoPayMethodText: this.state.autopayMethodText,
+      autopayMethod: this.state.autopayMethod,
+      autopayMethodText: this.state.autopayMethodText,
       startDate, endDate, payOnDay,
     }
     this.setState({ isLoading: true })
@@ -139,7 +139,7 @@ export class AutopaySetup extends Component {
   setTable = () => {
     const { autopay } = this.props.resident
     const rows = autopay ? [{
-      paymentAccount: autopay.autoPayMethodText,
+      paymentAccount: autopay.autopayMethodText,
       startDate: moment(autopay.startDate).format('L'),
       endDate: moment(autopay.endDate).format('L'),
       payOnDay: autopay.payOnDay,

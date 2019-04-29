@@ -23,7 +23,8 @@ export class Dashboard extends Component {
   render() {
     return (
       <StyledContainer>
-        <Tabs defaultActiveKey="makePayment">
+        <Tabs defaultActiveKey="makePayment"
+          mountOnEnter>
           <Tab eventKey="makePayment" title="Make Payment">
             <MakePayment payments={this.props.payments} />
           </Tab>

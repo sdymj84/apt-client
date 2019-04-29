@@ -57,12 +57,21 @@ export class PaymentAccounts extends Component {
     const prevBankAccount = this.props.resident.bankAccount
     const bankAccount = prevBankAccount.filter((account, i) =>
       i !== index)
+    const { autopay } = this.props.resident
+    const autopayAccountNum = autopay && autopay.autopayMethod
+      && autopay.autopayMethod.accountNum
+
+    console.log(autopay)
 
     try {
       await API.put('apt',
         `/residents/updateBankAccount/${rid}`, {
           body: { bankAccount }
         })
+      console.log(prevBankAccount[index].accountNum, autopayAccountNum)
+      if (prevBankAccount[index].accountNum === autopayAccountNum) {
+        await this.deleteAutopay(rid)
+      }
       this.props.updateResident(rid)
     } catch (e) {
       console.log(e, e.response)
@@ -74,13 +83,30 @@ export class PaymentAccounts extends Component {
     const prevCard = this.props.resident.card
     const card = prevCard.filter((card, i) =>
       i !== index)
+    const { autopay } = this.props.resident
+    const autopayCardNum = autopay && autopay.autopayMethod
+      && autopay.autopayMethod.number
 
     try {
       await API.put('apt',
         `/residents/updateCard/${rid}`, {
           body: { card }
         })
+      console.log(prevCard[index].number, autopayCardNum)
+      if (prevCard[index].number === autopayCardNum) {
+        await this.deleteAutopay(rid)
+      }
       this.props.updateResident(rid)
+    } catch (e) {
+      console.log(e, e.response)
+    }
+  }
+
+  deleteAutopay = async (rid) => {
+    try {
+      await API.put('apt', `/residents/updateAutopay/${rid}`, {
+        body: { autopay: "" }
+      })
     } catch (e) {
       console.log(e, e.response)
     }
