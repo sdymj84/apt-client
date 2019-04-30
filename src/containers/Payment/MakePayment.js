@@ -30,8 +30,10 @@ const MakePayment = ({ payments }) => {
   let total = 0
 
   // Get index of payment which balance was 0 for the last
-  const lastIndexOfZeroBalance = payments.findIndex(payment =>
+  let lastIndexOfZeroBalance = payments.findIndex(payment =>
     Number(payment.balance) === 0)
+  lastIndexOfZeroBalance = lastIndexOfZeroBalance === -1
+    ? payments.length : lastIndexOfZeroBalance
 
   let balanceRows = []
   for (let i = 0; i < lastIndexOfZeroBalance; i++) {
@@ -145,7 +147,7 @@ const MakePayment = ({ payments }) => {
   return (
     <StyledContainer>
       <div className="title">
-        <div>Current Balance : {payments.length 
+        <div>Current Balance : {payments.length
           ? formatter.format(payments[0].balance)
           : formatter.format(0)}
         </div>
