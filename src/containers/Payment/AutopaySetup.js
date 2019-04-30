@@ -55,13 +55,13 @@ export class AutopaySetup extends Component {
     const paymentMethodList = []
     let text = ""
 
-    bankAccount.forEach(account => {
+    bankAccount && bankAccount.forEach(account => {
       const type = (account.accountType === 'Checking Account')
         ? 'Chk' : 'Sav'
       text = `${account.name} ${type} *****${account.accountNum.slice(-4)}`
       paymentMethodList.push(text)
     })
-    card.forEach(card => {
+    card && card.forEach(card => {
       text = `${card.cardType} XXXX-${card.number.slice(-4)}`
       paymentMethodList.push(text)
     })

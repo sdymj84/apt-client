@@ -16,7 +16,6 @@ const GlobalStyle = createGlobalStyle`
     background-color: ${props => props.theme.backgroundColor};
   }
 `
-
 const StyledContainer = styled(Container)`
   margin-top: 15px;
   .navbar-brand a {
@@ -24,6 +23,15 @@ const StyledContainer = styled(Container)`
     text-decoration: none;
     font-weight: bold;
   }
+`
+const Body = styled.div`
+  min-height: 550px;
+`
+const Footer = styled(Navbar)`
+  margin-top: 3em;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
 `
 
 class App extends Component {
@@ -156,14 +164,20 @@ class App extends Component {
             </Navbar.Collapse>
           </Navbar>
 
-          {this.state.apart &&
-            <AnnouncementAlert
-              apart={this.state.apart}
-              isAnnouncementConfirmed={this.state.isAnnouncementConfirmed}
-              handleDismissAlert={this.handleDismissAlert}
-            />}
+          <Body>
+            {this.state.apart &&
+              <AnnouncementAlert
+                apart={this.state.apart}
+                isAnnouncementConfirmed={this.state.isAnnouncementConfirmed}
+                handleDismissAlert={this.handleDismissAlert}
+              />}
 
-          <Routes childProps={childProps} />
+            <Routes childProps={childProps} />
+          </Body>
+
+          <Footer variant="light" bg="light" expand="md">
+            <div>Designed and developed by Minjun Youn.</div>
+          </Footer>
         </StyledContainer>
       </ThemeProvider>
     );
