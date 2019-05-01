@@ -96,6 +96,20 @@ class App extends Component {
     })
   }
 
+  updatePayments = async (aid) => {
+    let payments = null
+    if (aid) {
+      try {
+        payments = await API.get('apt', `/payments/${aid}`)
+        payments = payments.Items
+      } catch (e) {
+        console.log(e, e.response)
+      }
+    }
+
+    this.setState({ payments })
+  }
+
   updateResident = async (uid) => {
     let resident = null
     if (uid) {
@@ -137,6 +151,7 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated,
       updateResident: this.updateResident,
+      updatePayments: this.updatePayments,
       resident: this.state.resident,
       apart: this.state.apart,
       payments: this.state.payments,
