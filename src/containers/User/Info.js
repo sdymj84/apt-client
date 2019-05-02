@@ -21,7 +21,9 @@ const StyledContainer = styled(Container)`
 
 const StyledCard = styled(Card)`
   margin-bottom: 20px;
-  
+  .move-out-confirmed {
+    color: red;
+  }
 `
 
 export class ResidentUserInfo extends Component {
@@ -119,7 +121,10 @@ export class ResidentUserInfo extends Component {
               <ListGroup.Item>
                 <Row>
                   <Col>Move Out Date</Col>
-                  <Col>{moment(apart.moveOutDate).format('L')}</Col>
+                  {apart.moveOutConfirmed
+                    ? <Col className="move-out-confirmed">
+                      {moment(apart.moveOutDate).format('L')}</Col>
+                    : <Col>{moment(apart.moveOutDate).format('L')}</Col>}
                 </Row>
               </ListGroup.Item>
             </ListGroup>

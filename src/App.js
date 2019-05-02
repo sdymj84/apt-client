@@ -123,6 +123,19 @@ class App extends Component {
     this.setState({ resident })
   }
 
+  updateApart = async (aid) => {
+    let apart = null
+    if (aid) {
+      try {
+        apart = await API.get('apt', `/aparts/${aid}`)
+      } catch (e) {
+        console.log(e, e.response)
+      }
+    }
+
+    this.setState({ apart })
+  }
+
   handleLogout = async () => {
     try {
       await Auth.signOut()
@@ -152,6 +165,7 @@ class App extends Component {
       userHasAuthenticated: this.userHasAuthenticated,
       updateResident: this.updateResident,
       updatePayments: this.updatePayments,
+      updateApart: this.updateApart,
       resident: this.state.resident,
       apart: this.state.apart,
       payments: this.state.payments,

@@ -88,7 +88,7 @@ export class AddAutopay extends Component {
                   <Dropdown.Item eventKey="2nd">2nd</Dropdown.Item>
                   <Dropdown.Item eventKey="3rd">3rd</Dropdown.Item>
                   <Dropdown.Item eventKey="4th">4th</Dropdown.Item>
-                  <Dropdown.Item eventKey="5th">5rd</Dropdown.Item>
+                  <Dropdown.Item eventKey="5th">5th</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Form.Group>

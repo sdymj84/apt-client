@@ -76,14 +76,19 @@ export class AutopaySetup extends Component {
   }
 
   handleModalClose = () => {
-    this.setState({ modalShow: false })
+    this.setState({
+      modalShow: false,
+      autopayMethodText: 'Select Account',
+    })
   }
 
   handleAccountSelect = (key, e) => {
     // save selected account object for future reference
     // save selected account text for dropdown title
 
-    const { bankAccount, card } = this.props.resident
+    let { bankAccount, card } = this.props.resident
+    bankAccount = bankAccount || []
+    card = card || []
     const autopayMethod = (e.target.id < bankAccount.length)
       // if selected method is bank account,
       ? bankAccount[e.target.id]
@@ -99,8 +104,8 @@ export class AutopaySetup extends Component {
 
   handleSubmit = async ({ startDate, endDate, payOnDay }, e) => {
     e.preventDefault()
-    console.log(this.state.autopayMethod, startDate, endDate, payOnDay)
     const rid = this.props.resident.residentId
+    const aid = this.props.resident.apartId
     const autopay = {
       autopayMethod: this.state.autopayMethod,
       autopayMethodText: this.state.autopayMethodText,
@@ -112,7 +117,17 @@ export class AutopaySetup extends Component {
       await API.put('apt', `/residents/updateAutopay/${rid}`, {
         body: { autopay }
       })
+      await API.put('apt', `/aparts/updateAutopay/${aid}`, {
+        body: {
+          isAutopayEnabled: true,
+          autopay: {
+            startDate, endDate, payOnDay,
+            residentId: rid,
+          }
+        }
+      })
       this.props.updateResident(rid)
+      this.props.updateApart(aid)
       this.handleModalClose()
     } catch (e) {
       console.log(e, e.response)
@@ -124,16 +139,27 @@ export class AutopaySetup extends Component {
   handleDelete = async () => {
     this.setState({ isLoading: true })
     const rid = this.props.resident.residentId
+    const aid = this.props.resident.apartId
     try {
       await API.put('apt', `/residents/updateAutopay/${rid}`, {
         body: { autopay: "" }
       })
+      await API.put('apt', `/aparts/updateAutopay/${aid}`, {
+        body: {
+          isAutopayEnabled: false,
+          autopay: ""
+        }
+      })
       this.props.updateResident(rid)
+      this.props.updateApart(aid)
     } catch (e) {
       console.log(e, e.response)
     }
 
-    this.setState({ isLoading: false })
+    this.setState({
+      isLoading: false,
+      autopayMethodText: 'Select Account'
+    })
   }
 
   setTable = () => {
@@ -186,7 +212,7 @@ export class AutopaySetup extends Component {
             <LoaderButton
               onClick={this.handleDelete}
               variant="outline-danger"
-              isLoading={this.state.isLoading}
+              isLoading={!this.state.modalShow && this.state.isLoading}
               text="Delete"
               loadingText="Deleting..." />
           </div>

@@ -26,14 +26,15 @@ export class Dashboard extends Component {
         <Tabs defaultActiveKey="makePayment"
           mountOnEnter>
           <Tab eventKey="makePayment" title="Make Payment">
-            <MakePayment 
+            <MakePayment
               payments={this.props.payments}
               updatePayments={this.props.updatePayments} />
           </Tab>
           <Tab eventKey="autoPaySetup" title="Auto-pay Setup">
             <AutopaySetup
               resident={this.props.resident}
-              updateResident={this.props.updateResident} />
+              updateResident={this.props.updateResident}
+              updateApart={this.props.updateApart} />
           </Tab>
           <Tab eventKey="recentActivity" title="Recent Activity">
             <RecentActivity payments={this.props.payments} />
