@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import LoaderButton from '../../components/LoaderButton';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment'
 
 
 const StyledModal = styled(Modal)`
@@ -44,10 +45,10 @@ export class AddAutopay extends Component {
   }
 
   handleStartDateChange = (date) => {
-    this.setState({ startDate: date })
+    this.setState({ startDate: moment(date).startOf('date')._d })
   }
   handleEndDateChange = (date) => {
-    this.setState({ endDate: date })
+    this.setState({ endDate: moment(date).endOf('date')._d })
   }
 
   render() {

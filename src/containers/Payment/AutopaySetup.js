@@ -147,7 +147,12 @@ export class AutopaySetup extends Component {
       await API.put('apt', `/aparts/updateAutopay/${aid}`, {
         body: {
           isAutopayEnabled: false,
-          autopay: ""
+          autopay: {
+            startDate: "",
+            endDate: "",
+            payOnDay: "",
+            residentId: "",
+          }
         }
       })
       this.props.updateResident(rid)
