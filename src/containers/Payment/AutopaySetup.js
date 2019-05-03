@@ -187,13 +187,13 @@ export class AutopaySetup extends Component {
       }, {
         accessor: 'startDate',
         label: 'Start Date',
-        position: 2,
-        minWidth: 200,
+        position: 3,
+        minWidth: 300,
         sortable: false,
       }, {
         accessor: 'endDate',
         label: 'End Date',
-        position: 3,
+        position: 2,
         minWidth: 200,
         sortable: false,
       }, {

@@ -156,12 +156,12 @@ export class PaymentAccounts extends Component {
       }, {
         accessor: 'routingNum',
         label: 'Routing No.',
-        position: 2,
-        minWidth: 200,
+        position: 3,
+        minWidth: 450,
       }, {
         accessor: 'accountNum',
         label: 'Account No.',
-        position: 3,
+        position: 2,
         minWidth: 200,
       }, {
         accessor: 'accountType',
@@ -171,7 +171,7 @@ export class PaymentAccounts extends Component {
       }, {
         accessor: 'bankDelete',
         label: 'Delete',
-        position: 6,
+        position: 5,
         minWidth: 3000,
         CustomComponent: DeleteButton,
       }]
