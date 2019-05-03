@@ -5,6 +5,10 @@ import styled from 'styled-components'
 
 const StyledAlert = styled(Alert)`
   margin: 5px;
+
+  button {
+    white-space: normal;
+  }
 `
 
 export class AnnouncementAlert extends Component {
