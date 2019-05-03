@@ -41,7 +41,6 @@ export class Login extends Component {
     try {
       const user = await Auth.signIn(this.state.email, this.state.password)
       this.props.userHasAuthenticated(user.username)
-      console.log(user)
     } catch (e) {
       console.log(e)
       if (e.code === "UserNotConfirmedException") {
