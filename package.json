@@ -24,7 +24,6 @@
     "test": "react-scripts test",
     "predeploy": "npm run build",
     "deploy": "aws s3 sync build/ s3://apt-client-resident --delete",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2C584981CG0OO --paths '/*'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

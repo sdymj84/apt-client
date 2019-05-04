@@ -30,7 +30,7 @@ const RecentActivity = ({ payments }) => {
   let rows = []
   payments.forEach(payment => {
     rows.push({
-      date: moment(new Date(payment.transactedAt)).format('L'),
+      date: moment(payment.transactedAt, 'x').format('L'),
       paymentAndCharges: payment.title,
       charges: formatter.format(payment.charge),
       payments: formatter.format(payment.payment),
