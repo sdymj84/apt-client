@@ -27,6 +27,7 @@ export class Dashboard extends Component {
           mountOnEnter>
           <Tab eventKey="makePayment" title="Make Payment">
             <MakePayment
+              resident={this.props.resident}
               payments={this.props.payments}
               updatePayments={this.props.updatePayments} />
           </Tab>

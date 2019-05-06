@@ -27,6 +27,13 @@ export class MakePayment extends Component {
   }
 
   handlePayNow = async () => {
+    const { bankAccount, card } = this.props.resident
+    const isPayable = (bankAccount && bankAccount.length) || (card && card.length)
+    if (!isPayable) { 
+      alert("Please add payment method first.")
+      return
+    }
+
     this.setState({ isLoading: true })
     const apartId = this.props.payments[0].apartId
     try {

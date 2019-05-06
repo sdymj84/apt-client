@@ -59,7 +59,9 @@ class App extends Component {
   componentDidMount = async () => {
     this._isMounted = true
     try {
+      const session = await Auth.currentSession()
       const currentUser = await Auth.currentAuthenticatedUser()
+      console.log(session)
       await this.userHasAuthenticated(currentUser.username)
     } catch (e) {
       console.log(e, e.response)
@@ -212,7 +214,10 @@ class App extends Component {
           </Body>
 
           <Footer variant="light" bg="light" expand="md">
-            <div>Designed and developed by Minjun Youn.</div>
+            <div>
+              <div>Designed and developed by Minjun Youn.</div>
+              <div>Contact: sdymj84@gmail.com</div>
+            </div>
           </Footer>
         </StyledContainer>
       </ThemeProvider>

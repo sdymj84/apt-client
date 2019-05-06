@@ -89,3 +89,38 @@
     <Button>CLICK</Button>
   </Link>
   ```
+---
+
+## Presentation
+
+### Precondition
+- One apart 0101 with on resident (for payment demo)
+- No other aparts
+
+### Move in
+- M: Login and explore manager features
+- M: Add 3 units with different floorplan and announcement
+- M: Add 3 new resident on 0102 (Lease 6 months)
+- R: Check email > Verify email and change password
+- R: Explore resident feature
+- M: Explore resident info on 0102
+
+### Move out
+- M: Delete one of residents
+- M: Early Move out button > Change date > Confirm move out
+
+### Payment
+- R: Login 0101 > Show payment
+- R: Add/Delete payment methods > Add/Delete Autopay
+- R: Pay now
+- M: Check payment is made correctly
+
+### Maintanance
+- R: Create 2 request (1 high, 1 normal)
+- M: Check reqeusts > Process > Take notes > Complete
+
+### Announcement
+- M: Make announcement for all / units / pet owners
+- R: Check and dismiss announcement
+- M: Make another announcement
+- R: Check again for new one
