@@ -93,34 +93,122 @@
 
 ## Presentation
 
-### Precondition
-- One apart 0101 with on resident (for payment demo)
-- No other aparts
-
 ### Move in
 - M: Login and explore manager features
+    - Use Amazon Cognito
+    - Use AWS Amplify Auth for sign in on client side
+
 - M: Add 3 units with different floorplan and announcement
-- M: Add 3 new resident on 0102 (Lease 6 months)
+    - Add to Aparts DB
+    - Use AWS Amplify API to call lambda functions and fetch data
+    - api : createApart
+
+- M: Add 2 new residents on 0101 (Lease 6 months)
+- M: Add 1 new resident on 0201 with pet (lease 12 months)
+    - Signup on cognito > Add to Residents DB > Add to Aparts DB, 0101 document
+    - Denormalization : save resident on both resident DB and apart DB to access server only once to get both apart and resident info
+    - api : createResident
+
 - R: Check email > Verify email and change password
+    - Include link to verify email and redirect user to password change page
+    - api : customMessage
+
 - R: Explore resident feature
-- M: Explore resident info on 0102
 
-### Move out
-- M: Delete one of residents
-- M: Early Move out button > Change date > Confirm move out
+- M: Explore resident info on 0101
 
-### Payment
-- R: Login 0101 > Show payment
-- R: Add/Delete payment methods > Add/Delete Autopay
-- R: Pay now
-- M: Check payment is made correctly
 
 ### Maintanance
 - R: Create 2 request (1 high, 1 normal)
+    - Add to Maintanances DB
+    - Use requestedAt property as sort key to always sort by requested time
+    - api : createRequest
+
 - M: Check reqeusts > Process > Take notes > Complete
+    - Sort by time and priority (The oldest and high priority request show on the top)
+    - api : listRequests, updateRequestNote, updateStatus
+
 
 ### Announcement
 - M: Make announcement for all / units / pet owners
+    - Query aparts by apartId / building num / property like isPet and loop aparts list, update announcement on each apart
+    - api : updateAnnouncement
+
 - R: Check and dismiss announcement
+    - Update isAnnouncementConfirmed to true
+    - api : confirmAnnouncement
+
 - M: Make another announcement
+    - Update announcment and isAnnouncementConfirmed to false
+
 - R: Check again for new one
+
+
+### Payment
+- S(A): API gateway > Run chargeMonthly
+    - This is triggered automatically by system schedule on the 1st day, every month (Setup on AWS CloudWatch)
+    - Trigger manually for demo
+    - api : chargeMonthly
+
+- R: Login 0101 > Show payment
+
+- R: Add/Delete payment methods
+    - Payment info is added to Residents DB because it belongs to each resident
+    - updateBankAccount, updateCard
+
+- R: Add/Delete Autopay
+    - Autopay is triggered automatically by system schedule on every month
+    - Autopay info is added to Aparts DB so that autopay system doesn't need to check every Residents DB on that unit
+    - api : updateAutopay
+
+- R: Pay now
+    - When charge or make a payment, get the latest balance from Payments DB which is sorted by time > Add it to current charge or payment
+    - This makes new record, not deleting previous charges so it keeps all the records
+    - api : createPayment
+
+- M: Check payment is made correctly
+    - api : listPayments
+
+- S: Alert payment due date
+    - Update announcement to pay on every 5th day for any units that balance is not 0
+    - api : alertLatePayment
+
+
+### Move out
+- M: Early Move out button > Change date to next month > Confirm move out
+    - Update moveOutDate from Aparts DB
+    - Update moveOutConfirmed to true so it cannot change any more
+    - api : updateMoveOutDate
+
+- S: Check each unit's moveOutDate everyday and see if any unit reached 60 days before moveOutDate > Postpone moveOutDate to 60 days from today
+    - Skip if no moveOutDate (vacant) or moveOutDateConfirmed
+    - Alert each residents in the unit that you reached 60 days
+    - api : updateMoveOut
+
+- M: 0101 > Delete one of residents > Balance not 0 warning
+
+- R: 0101 > Pay Now
+    - Get the latest balance and add transaction to pay off the balance
+    - api : createPayment
+
+- M: 0101 > Delete residents
+    - To apply "isLoading" on the specific button, made "isDeleting" array and indexToDelete variable
+    - Delete resident from Residents DB and from the unit's residents list of Aparts DB
+    - api : deleteResident, removeResident (from apart)
+
+- A: Change 0201's leaseEndDate to 60 days from today (simulate that he didn't confirm move out and reached 60 days)
+    - Because "Renew" button only show when leaseEndDate is less than 60 days from today
+
+- M: 0201 > Renew 12 months
+    - api : renew
+
+
+### Other Technical Stuff
+- Pass props from App to a component rendered by React Router
+  (Fetch all data for that user on App when login and pass all props down to each component when rendered)
+
+### Q&A
+- Q: What was the most difficult part?
+    - A: Data modeling, it was hard to come up with the structure at first and I needed to modify alot during the development. and later, I event felt like NoSQL was not the right choice for this project since I needed to query/get/filter with non-key properties a lot of times
+    - A: For React, deciding where to write logic, which components should be class/functional, making a component reusable
+- Q: 
