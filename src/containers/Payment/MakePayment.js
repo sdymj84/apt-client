@@ -29,7 +29,7 @@ export class MakePayment extends Component {
   handlePayNow = async () => {
     const { bankAccount, card } = this.props.resident
     const isPayable = (bankAccount && bankAccount.length) || (card && card.length)
-    if (!isPayable) { 
+    if (!isPayable) {
       alert("Please add payment method first.")
       return
     }
@@ -74,8 +74,10 @@ export class MakePayment extends Component {
       balanceRows.push({
         charge: payments[i].title,
         amount: formatter.format(payments[i].charge),
-        chargedOn: moment(Date(payments[i].transactedAt)).format('L'),
+        chargedOn: moment(payments[i].transactedAt, 'x').format('L'),
       })
+      console.log(i, payments[i].transactedAt)
+      console.log(moment(payments[i].transactedAt, 'x').format('L'))
     }
 
     const balanceDetail = {

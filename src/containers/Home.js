@@ -6,6 +6,19 @@ import { FaMoneyCheckAlt, FaUserAlt } from "react-icons/fa";
 import { GiAutoRepair } from "react-icons/gi";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
+import posed from 'react-pose'
+
+const PosedDiv = posed.div({
+  visible: {
+    opacity: 1,
+    y: 0,
+    delay: p => p.delay,
+  },
+  hidden: {
+    opacity: 0,
+    y: 50,
+  }
+})
 
 const StyledContainer = styled(Container)`
   text-align: center;
@@ -61,20 +74,36 @@ const StyledLink = styled(Link)`
 
 
 export class Home extends Component {
+  _isMounted = false
+  state = {
+    isVisible: false,
+  }
+
+  componentDidMount = async () => {
+    this._isMounted = true
+    this.setState({ isVisible: true })
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   renderLander() {
     return (
       <StyledContainer>
         <FlexContainer>
-          <div>
+          <PosedDiv pose={this.state.isVisible ? "visible" : "hidden"}>
             <h2>SAVOY Apartment Management Portal</h2>
             <p>Welcome, you can pay your rent, request maintanance work, and update your info.</p>
-          </div>
+          </PosedDiv>
         </FlexContainer>
-        <div>
+        <PosedDiv
+          pose={this.state.isVisible ? "visible" : "hidden"}
+          delay={50}>
           <LinkContainer to='/login'>
             <Button variant={`outline-${this.props.theme.buttonTheme}`} size="lg">LOG IN</Button>
           </LinkContainer>
-        </div>
+        </PosedDiv>
       </StyledContainer>
     )
   }
